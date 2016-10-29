@@ -5,13 +5,13 @@ using System.Collections;
 public class DoorRaycast : MonoBehaviour
 {
     private RaycastHit hit;
-    private PlayMakerFSM fsm;
+    private GameObject thisCast, lateCast;
     private int layerMask;
 
     // Use this for initialization
     void Start()
     {
-        layerMask = LayerMask.GetMask("Doors");
+        layerMask = LayerMask.GetMask("Items");
     }
 
     // Update is called once per frame
@@ -19,13 +19,23 @@ public class DoorRaycast : MonoBehaviour
     {
         if (Physics.Raycast(transform.position, transform.forward, out hit, 5f, layerMask))
         {
-            fsm = hit.collider.GetComponent<PlayMakerFSM>();
-            fsm.FsmVariables.GetFsmBool("StartOpen").Value = true;
+            thisCast = hit.collider.gameObject;
+            if (thisCast != lateCast)
+            {
+                if (lateCast != null)
+                {
+                    lateCast.GetComponent<PlayMakerFSM>().FsmVariables.GetFsmBool("StartOpen").Value = false;
+                }
+
+                lateCast = thisCast;
+            }
+
+            lateCast.GetComponent<PlayMakerFSM>().FsmVariables.GetFsmBool("StartOpen").Value = true;
 
         }
 
-            else if (fsm != null)
-                fsm.FsmVariables.GetFsmBool("StartOpen").Value = false;
+        else if (lateCast != null)
+            lateCast.GetComponent<PlayMakerFSM>().FsmVariables.GetFsmBool("StartOpen").Value = false;
 
 
     }
