@@ -31,7 +31,7 @@ public class Orologio : MonoBehaviour
         if (!timeStep)
             timeStep = button.GetComponent<ButtonSearch>().paperON;
 
-        if ( time && activated)
+        if (timeStep && time && activated)
         {
             button.SetActive(true);
             activated = false;
@@ -43,10 +43,7 @@ public class Orologio : MonoBehaviour
             activated = true;
         }
 
-        if (!time)
-        {
-            
-        }
+        
 
 
     }
