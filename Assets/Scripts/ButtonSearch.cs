@@ -49,6 +49,7 @@ public class ButtonSearch : MonoBehaviour
     public bool dollON;
     public bool slotDollON;
     public bool knockCheck;
+    public bool dollDone;
 
 
     // Use this for initialization
@@ -142,6 +143,7 @@ public class ButtonSearch : MonoBehaviour
                 {
                     armadio.GetComponent<ClockEvent>().check = false;
                     armadio.enabled = false;
+                    dollDone = true;
                 }
                     
             }
