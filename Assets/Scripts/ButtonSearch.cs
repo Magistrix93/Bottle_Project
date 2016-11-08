@@ -116,6 +116,7 @@ public class ButtonSearch : MonoBehaviour
             if (myDoll && this.gameObject.activeSelf && !dollON)
             {
                 dollobj.SetActive(false);
+                imgWardr.SetActive(true);
                 dollON = true;
                 this.gameObject.SetActive(false);
             }
@@ -128,7 +129,7 @@ public class ButtonSearch : MonoBehaviour
 
             if (myDollSlot && !slotDollON && dollON && this.gameObject.activeSelf)
             {
-                dollobj.transform.position = new Vector3(slotDollobj.transform.position.x, slotDollobj.transform.position.y, slotDollobj.transform.position.z);
+                dollobj.transform.position = new Vector3(slotDollobj.transform.position.x, slotDollobj.transform.position.y - 1.2f, slotDollobj.transform.position.z);
                 dollobj.SetActive(true);
                 slotDollON = true;
                 this.gameObject.SetActive(false);

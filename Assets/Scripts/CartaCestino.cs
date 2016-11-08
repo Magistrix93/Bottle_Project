@@ -7,14 +7,15 @@ public class CartaCestino : MonoBehaviour
 
     private PlayMakerFSM myFsm;
     public bool paper;
-    public bool paperStep = false;
-    private bool activated=true;
+    public bool paperStep;
+    private bool activated;
     public GameObject button;
     public GameObject note2;
 
     // Use this for initialization
     void Start()
     {
+        activated = true;
         myFsm = GetComponent<PlayMakerFSM>();
     }
 
