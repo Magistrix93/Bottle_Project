@@ -4,37 +4,42 @@ using System.Collections;
 
 public class Lightmap : MonoBehaviour
 {
-    private LightmapData[] lightmap;
+    private LightmapData[] lightmapNormal, lightmapDark;
 
     // Use this for initialization
     void Start()
     {
-        lightmap = new LightmapData[18];
+        lightmapNormal = new LightmapData[17];
+
+        lightmapDark = new LightmapData[17];
+
+        for (int i = 0; i < 17; i++)
+        {
+            lightmapNormal[i] = new LightmapData();
+            lightmapNormal[i].lightmapFar = Resources.Load("Scena_1/Lightmap-" + i.ToString() + "_comp_light", typeof(Texture2D)) as Texture2D;
+        }
+        for (int i = 0; i < 17; i++)
+        {
+            lightmapDark[i] = new LightmapData();
+            lightmapDark[i].lightmapFar = Resources.Load("Scena_1_Buia/Lightmap-" + i.ToString() + "_comp_light", typeof(Texture2D)) as Texture2D;
+        }
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown("l"))
-        {
-            for (int i = 0; i < 18; i++)
-            {
-                lightmap[i] = new LightmapData();
-                lightmap[i].lightmapFar = Resources.Load("Scena_1_Rossa/Lightmap-" + i.ToString() + "_comp_light", typeof(Texture2D)) as Texture2D;
-            }
 
-            LightmapSettings.lightmaps = lightmap;
-        }
+    }
 
-        if (Input.GetKeyDown("k"))
-            {
-                for (int i = 0; i < 18; i++)
-                {
-                    lightmap[i] = new LightmapData();
-                    lightmap[i].lightmapFar = Resources.Load("Scena_1/Lightmap-" + i.ToString() + "_comp_light", typeof(Texture2D)) as Texture2D;
-                }
 
-                LightmapSettings.lightmaps = lightmap;
-            }
+    public void SetLightmapNormal()
+    {
+        LightmapSettings.lightmaps = lightmapNormal;
+    }
+
+    public void SetLightmapDark()
+    {
+        LightmapSettings.lightmaps = lightmapDark;
     }
 }

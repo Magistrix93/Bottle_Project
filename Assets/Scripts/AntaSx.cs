@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class AntaSx : MonoBehaviour {
@@ -21,6 +22,7 @@ public class AntaSx : MonoBehaviour {
 
         if (antaSx && activated)
         {
+            button.GetComponent<Image>().sprite = button.GetComponent<ButtonSearch>().searchIconUI;
             button.SetActive(true);
             activated = false;
         }

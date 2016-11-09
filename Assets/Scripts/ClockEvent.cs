@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System;
 
 public class ClockEvent : MonoBehaviour
 {
@@ -8,10 +9,6 @@ public class ClockEvent : MonoBehaviour
     public int hour = 0;
 
     public float clockSpeed = 1.0f;     // 1.0f = realtime, < 1.0f = slower, > 1.0f = faster
-
-    public int seconds;
-    public float msecs;
-
 
     public GameObject button;
     public GameObject anta;
@@ -24,46 +21,42 @@ public class ClockEvent : MonoBehaviour
     public bool check = false;
     public int delay;
     public bool isInCoroutine;
-    public bool scaryStep=false;
+    public bool scaryStep = false;
+    public bool coroutineGo = true;
+
 
 
     void Start()
-    {        
-
-        msecs = 0.0f;
-        seconds = 0;
-        delay = 5;
+    {
+        delay = 30;
     }
 
     void Update()
     {
 
         antaCheck = button.GetComponent<ButtonSearch>().checkSx;
+        
+        if (coroutineGo)
+            StartCoroutine(waitDoor());
 
-
-        //-- calculate time
-        msecs += Time.deltaTime * clockSpeed;
-        if (msecs >= 1.0f)
+        if (check)
         {
-            msecs -= 1.0f;
-            seconds++;
-            if (seconds >= 60)
+            if (!isInCoroutine)
             {
-                seconds = 0;
-                minutes++;
-                if (minutes > 60)
-                {
-                    minutes = 0;
-                    hour++;
-                    if (hour >= 24)
-                        hour = 0;
-                }
+                StartCoroutine(TenSeconds());
             }
+
         }
 
-        
+            
+    }
 
-        if (seconds >= delay && !check)
+    private IEnumerator waitDoor()
+    {
+        coroutineGo = false;
+        yield return new WaitForSeconds(30);
+
+        if (!check)
         {
             if (!antaCheck)
             {
@@ -72,28 +65,21 @@ public class ClockEvent : MonoBehaviour
             }
 
             check = true;
-            StartCoroutine("wait");            
-            myAudio.Play();          
-               
-        }
 
-        if (check)
-        {
-            if(!isInCoroutine)
-            {
-                StartCoroutine("TenSeconds");
-                isInCoroutine = true;
-                myAudio.Play();
-            }
-            
+            StartCoroutine(wait());
+            myAudio.Play();
+
         }
 
 
     }
 
     public IEnumerator TenSeconds()
-    {        
-        yield return new WaitForSeconds(Random.Range(5, 10));
+    {
+        isInCoroutine = true;
+        myAudio.Play();
+        yield return new WaitForSeconds(UnityEngine.Random.Range(5, 10));
+       
         isInCoroutine = false;
     }
 
@@ -101,9 +87,11 @@ public class ClockEvent : MonoBehaviour
     {
         yield return new WaitForSeconds(3f);
         dollOBJ.SetActive(false);
-        elsa.transform.position = new Vector3(dollOBJ.transform.position.x, dollOBJ.transform.position.y - 0.5f, dollOBJ.transform.position.z + 0.45f);
-        elsa.transform.rotation = Quaternion.Euler(0, -190, 0);
         elsa.SetActive(true);
+        elsa.transform.position = new Vector3(dollOBJ.transform.position.x, dollOBJ.transform.position.y + 0.5f, dollOBJ.transform.position.z + 0.45f);
+        elsa.transform.rotation = Quaternion.Euler(0, -190, 0);
         scaryStep = true;
     }
+
+   
 }

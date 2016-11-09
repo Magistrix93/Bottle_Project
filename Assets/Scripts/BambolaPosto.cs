@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class BambolaPosto : MonoBehaviour {
@@ -21,6 +22,7 @@ public class BambolaPosto : MonoBehaviour {
 
         if (slotDoll && activated)
         {
+            button.GetComponent<Image>().sprite = button.GetComponent<ButtonSearch>().handIconUI;
             button.SetActive(true);
             activated = false;
         }

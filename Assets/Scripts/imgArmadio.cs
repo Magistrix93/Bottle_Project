@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class imgArmadio : MonoBehaviour {
@@ -7,7 +8,7 @@ public class imgArmadio : MonoBehaviour {
     public bool imgWardrobe;
     private bool activated = true;
     public GameObject button;
-    public GameObject note3;
+    public GameObject note1;
 
     // Use this for initialization
     void Start()
@@ -22,6 +23,7 @@ public class imgArmadio : MonoBehaviour {
 
         if (imgWardrobe && activated)
         {
+            button.GetComponent<Image>().sprite = button.GetComponent<ButtonSearch>().searchIconUI;
             button.SetActive(true);
             activated = false;
         }
@@ -30,9 +32,7 @@ public class imgArmadio : MonoBehaviour {
         {
             button.SetActive(false);
             activated = true;
-        }
-
-        if (!imgWardrobe)
-            note3.SetActive(false);
+            note1.SetActive(false);
+        }            
     }
 }

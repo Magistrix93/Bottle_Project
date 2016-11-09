@@ -20,6 +20,7 @@ public class btnExit : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        
     }
 
     // Update is called once per frame
@@ -38,10 +39,11 @@ public class btnExit : MonoBehaviour
         btnLeft.SetActive(false);
         btnRight.SetActive(false);
 
+
         if (orologio.GetComponent<Clock>().minutes == 30 && orologio.GetComponent<Clock>().hour == 12)
         {
-            on = true;
             audioSlam.PlayOneShot(youDontKnow);
+            on = true;            
         }
 
     }
