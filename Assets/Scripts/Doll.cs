@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class Doll : MonoBehaviour {
@@ -21,6 +22,7 @@ public class Doll : MonoBehaviour {
 
         if (doll && activated)
         {
+            button.GetComponent<Image>().sprite = button.GetComponent<ButtonSearch>().handIconUI;
             button.SetActive(true);
             activated = false;
         }

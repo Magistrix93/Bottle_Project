@@ -26,18 +26,18 @@ public class Diary : MonoBehaviour
 
         if (diaryRead && activated)
         {
+            button.GetComponent<Image>().sprite = button.GetComponent<ButtonSearch>().searchIconUI;
             button.SetActive(true);
             activated = false;            
         }           
 
         else if (!diaryRead && !activated)
         {
+            button.GetComponent<ButtonSearch>().text.SetActive(false);
+            button.GetComponent<ButtonSearch>().text.GetComponent<Text>().text = "";
             button.SetActive(false);
             activated = true;
-        }
-
-        if (!diaryRead)
             note1.SetActive(false);
-
+        }
     }
 }

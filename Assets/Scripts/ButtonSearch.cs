@@ -9,16 +9,24 @@ public class ButtonSearch : MonoBehaviour
     public bool faseA2;
     public bool faseA3;
 
+    public GameObject elsa;
     public GameObject antaDx;
     public GameObject antaSx;
     public bool antaDxCheck;
     public bool antaSxCheck;
     public bool checkDx;
     public bool checkSx;
+    public GameObject gameManager;
+    public Sprite searchIconUI;
+    public Sprite handIconUI;
+
 
     //Fase A1
+    public GameObject text;
     public GameObject note1;
     public GameObject note2;
+    public Sprite diaryUI;
+    public Sprite cartaUI;
     public GameObject diario;
     public GameObject carta;
     public GameObject orologio;
@@ -39,9 +47,12 @@ public class ButtonSearch : MonoBehaviour
     //Fase A2
     public GameObject dollobj;
     public GameObject imgWardr;
-    public GameObject note3;
+    public Sprite imgWardrobeUI;
+    public Sprite dollUI;
     public GameObject slotDollobj;
     public ClockEvent armadio;
+    public AudioSource myAudio;
+    public AudioClip tvScary;
     public bool myDoll;
     public bool myImgWardr;
     public bool myDollSlot;
@@ -49,6 +60,8 @@ public class ButtonSearch : MonoBehaviour
     public bool slotDollON;
     public bool knockCheck;
     public bool dollDone;
+
+
 
 
     // Use this for initialization
@@ -59,6 +72,7 @@ public class ButtonSearch : MonoBehaviour
         faseA3 = true;
         checkDx = true;
         checkSx = true;
+
     }
 
     // Update is called once per frame
@@ -79,25 +93,32 @@ public class ButtonSearch : MonoBehaviour
     }
 
 
+
+
+
     public void OnClick()
     {
         if (faseA1)
         {
-            if (myDiary && this.gameObject.activeSelf)
+            if (myDiary)
             {
+                text.SetActive(true);
+                text.GetComponent<Text>().text = "A page is missing.";
+                note1.GetComponent<Image>().sprite = diaryUI;
                 this.gameObject.SetActive(false);
                 note1.SetActive(true);
                 diaryON = true;
             }
 
-            if (myPaper && this.gameObject.activeSelf)
+            if (myPaper)
             {
+                note1.GetComponent<Image>().sprite = cartaUI;
                 this.gameObject.SetActive(false);
-                note2.SetActive(true);
+                note1.SetActive(true);
                 paperON = true;
             }
 
-            if (myTime && this.gameObject.activeSelf)
+            if (myTime)
             {
                 this.gameObject.SetActive(false);
                 mainCam.SetActive(false);
@@ -113,45 +134,68 @@ public class ButtonSearch : MonoBehaviour
 
         if (faseA2)
         {
-            if (myDoll && this.gameObject.activeSelf && !dollON)
+            if (myDoll && !dollON)
             {
+                note2.SetActive(true);
+                note2.GetComponent<Image>().sprite = dollUI;
                 dollobj.SetActive(false);
                 imgWardr.SetActive(true);
                 dollON = true;
                 this.gameObject.SetActive(false);
             }
 
-            if (myImgWardr && this.gameObject.activeSelf)
+            if (myImgWardr)
             {
+                note1.SetActive(true);
+                note1.GetComponent<Image>().sprite = imgWardrobeUI;
                 this.gameObject.SetActive(false);
-                note3.SetActive(true);                
+
             }
 
-            if (myDollSlot && !slotDollON && dollON && this.gameObject.activeSelf)
+            if (myDollSlot && !slotDollON && dollON)
             {
+                note2.GetComponent<Image>().sprite = null;
+                note2.SetActive(false);
                 dollobj.transform.position = new Vector3(slotDollobj.transform.position.x, slotDollobj.transform.position.y - 1.2f, slotDollobj.transform.position.z);
                 dollobj.SetActive(true);
                 slotDollON = true;
                 this.gameObject.SetActive(false);
             }
 
-            if (antaSxCheck && checkSx &&  !antaSx.GetComponent<Animation>().IsPlaying("antaSxRagazzaClose"))
+            if (antaSxCheck && checkSx && !antaSx.GetComponent<Animation>().IsPlaying("antaSxRagazzaClose"))
             {
                 antaSx.GetComponent<Animation>().Play("antaSxRagazza");
                 checkSx = false;
+
                 if (knockCheck)
                 {
-                    armadio.GetComponent<ClockEvent>().check = false;
+                    armadio.check = false;
+                    elsa.GetComponent<Animator>().SetTrigger("IsScream");
+                    myAudio.Play();
+                    gameManager.GetComponent<GameManager>().avviaCoroutine();
                     armadio.enabled = false;
                     dollDone = true;
+
                 }
-                    
+
             }
 
             if (antaSxCheck && !checkSx && !antaSx.GetComponent<Animation>().IsPlaying("antaSxRagazza"))
             {
                 antaSx.GetComponent<Animation>().Play("antaSxRagazzaClose");
                 checkSx = true;
+            }
+
+            if (antaDxCheck && checkSx && !antaSx.GetComponent<Animation>().IsPlaying("antaDxRagazzaClose"))
+            {
+                antaDx.GetComponent<Animation>().Play("antaDxRagazza");
+                checkDx = false;
+            }
+
+            if (antaDxCheck && !checkSx && !antaSx.GetComponent<Animation>().IsPlaying("antaDxRagazza"))
+            {
+                antaDx.GetComponent<Animation>().Play("antaDxRagazzaClose");
+                checkDx = true;
             }
 
 
@@ -163,5 +207,6 @@ public class ButtonSearch : MonoBehaviour
 
         }
     }
+
 
 }

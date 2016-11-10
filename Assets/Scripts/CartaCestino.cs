@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using PlayMaker;
 
@@ -10,7 +11,7 @@ public class CartaCestino : MonoBehaviour
     public bool paperStep;
     private bool activated;
     public GameObject button;
-    public GameObject note2;
+    public GameObject note1;
 
     // Use this for initialization
     void Start()
@@ -29,6 +30,7 @@ public class CartaCestino : MonoBehaviour
 
         if (paperStep && paper && activated)
         {
+            button.GetComponent<Image>().sprite = button.GetComponent<ButtonSearch>().searchIconUI;
             button.SetActive(true);
             activated = false;
         }
@@ -37,11 +39,7 @@ public class CartaCestino : MonoBehaviour
         {
             button.SetActive(false);
             activated = true;
+            note1.SetActive(false);
         }
-
-        if (!paper)
-            note2.SetActive(false);
-
-
     }
 }
