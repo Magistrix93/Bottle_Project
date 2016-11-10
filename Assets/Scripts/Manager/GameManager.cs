@@ -11,9 +11,11 @@ public class GameManager : MonoBehaviour
     public btnExit btnexit;
     private PlayMakerFSM switchLightmap;
     public PlayMakerFSM faseA3;
+    public PlayMakerFSM tvFine;
     public bool startJumpscare;
     public bool timeEventDone;
     public bool dollEventDone;
+    public bool tvDone;
 
     // Use this for initialization
     void Start()
@@ -28,6 +30,7 @@ public class GameManager : MonoBehaviour
     {
         dollEventDone = events.dollDone;
         startJumpscare = btnexit.on;
+        tvDone = tvFine.GetComponent<PlayMakerFSM>().FsmVariables.GetFsmBool("Fine Televisore").Value;
 
         if (timeEventDone)
         {
@@ -48,6 +51,13 @@ public class GameManager : MonoBehaviour
             switchLightmap.SendEvent("JumpScareClock");
             startJumpscare = false;
             timeEventDone = true;
+        }
+
+        if(tvDone)
+        {
+            events.faseA1 = false;
+            events.faseA2 = false;
+            //phone.enabled = true;
         }
 
     }

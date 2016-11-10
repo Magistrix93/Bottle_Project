@@ -8,7 +8,7 @@ public class ButtonSearch : MonoBehaviour
     public bool faseA1;
     public bool faseA2;
     public bool faseA3;
-
+    public PlayMakerFSM fineTv;
     public GameObject elsa;
     public GameObject antaDx;
     public GameObject antaSx;
@@ -16,6 +16,7 @@ public class ButtonSearch : MonoBehaviour
     public bool antaSxCheck;
     public bool checkDx;
     public bool checkSx;
+    public bool tvFine;
     public GameObject gameManager;
     public Sprite searchIconUI;
     public Sprite handIconUI;
@@ -67,6 +68,7 @@ public class ButtonSearch : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        tvFine = fineTv.GetComponent<PlayMakerFSM>().FsmVariables.GetFsmBool("Fine Televisore").Value;
         faseA1 = true;
         faseA2 = true;
         faseA3 = true;
@@ -98,7 +100,7 @@ public class ButtonSearch : MonoBehaviour
 
     public void OnClick()
     {
-        if (faseA1)
+        if (faseA1 && !tvFine)
         {
             if (myDiary)
             {
@@ -132,7 +134,7 @@ public class ButtonSearch : MonoBehaviour
             }
         }
 
-        if (faseA2)
+        if (faseA2 && !tvFine)
         {
             if (myDoll && !dollON)
             {
@@ -202,10 +204,7 @@ public class ButtonSearch : MonoBehaviour
 
         }
 
-        if (faseA3)
-        {
-
-        }
+        
     }
 
 
