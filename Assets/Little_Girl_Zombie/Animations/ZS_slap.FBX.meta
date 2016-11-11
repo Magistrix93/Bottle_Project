@@ -188,7 +188,7 @@ ModelImporter:
     4300004: CTRL_EyeR
     4300006: CTRL_EyeL
     4300008: Head
-    7400000: Take 001
+    7400000: Slap
     9500000: //RootNode
     11100000: //RootNode
     13700000: Body
@@ -215,7 +215,7 @@ ModelImporter:
     extraExposedTransformPaths: []
     clipAnimations:
     - serializedVersion: 16
-      name: Take 001
+      name: Slap
       takeName: Take 001
       firstFrame: 0
       lastFrame: 26

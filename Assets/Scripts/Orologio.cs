@@ -15,35 +15,45 @@ public class Orologio : MonoBehaviour
     public GameObject buttonExit;
     public GameObject btnLeft;
     public GameObject btnRight;
+    private GameObject gameManager;
+    private GameManager gameManagerScript;
 
     // Use this for initialization
     void Start()
     {
-        myFsm = GetComponent<PlayMakerFSM>();        
+        myFsm = GetComponent<PlayMakerFSM>();
+        gameManager = GameObject.FindGameObjectWithTag("GameManager");
+        gameManagerScript = gameManager.GetComponent<GameManager>();
+        if (gameManagerScript.fasi != Fasi.A)
+            this.enabled = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-
-        time = myFsm.FsmVariables.GetFsmBool("StartOpen").Value;
-
-        if (!timeStep)
-            timeStep = button.GetComponent<ButtonSearch>().paperON;
-
-        if (timeStep && time && activated)
+        if (gameManagerScript.faseA == FaseA.none)
         {
-            button.SetActive(true);
-            activated = false;
+
+            time = myFsm.FsmVariables.GetFsmBool("StartOpen").Value;
+
+            if (!timeStep)
+                timeStep = button.GetComponent<ButtonSearch>().paperON;
+
+            if (timeStep && time && activated)
+            {
+                button.SetActive(true);
+                activated = false;
+            }
+
+            else if (!time && !activated)
+            {
+                button.SetActive(false);
+                activated = true;
+            }
         }
 
-        else if (!time && !activated)
-        {
-            button.SetActive(false);
-            activated = true;
-        }
 
-        
+
 
 
     }

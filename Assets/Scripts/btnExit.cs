@@ -9,11 +9,11 @@ public class btnExit : MonoBehaviour
     public GameObject mainCam;
     public GameObject controller1;
     public GameObject controller2;
-    public GameObject buttonExit;
     public GameObject btnLeft;
     public GameObject btnRight;
     public GameObject orologio;
-    public AudioSource audioSlam;
+    public GameObject audioSlam;
+    private AudioSource[] audioSources;
     public AudioClip youDontKnow;
     public bool on = false;
 
@@ -35,16 +35,20 @@ public class btnExit : MonoBehaviour
         camTime.SetActive(false);
         controller1.GetComponent<Image>().enabled = true;
         controller2.GetComponent<Image>().enabled = true;
-        buttonExit.SetActive(false);
+       
         btnLeft.SetActive(false);
         btnRight.SetActive(false);
 
+        
 
         if (orologio.GetComponent<Clock>().minutes == 30 && orologio.GetComponent<Clock>().hour == 12)
         {
-            audioSlam.PlayOneShot(youDontKnow);
+            audioSources = audioSlam.GetComponents<AudioSource>();
+            audioSources[7].Play();
+            
             on = true;            
         }
 
+        gameObject.SetActive(false);
     }
 }

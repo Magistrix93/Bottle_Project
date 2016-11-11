@@ -1,64 +1,110 @@
 ﻿using UnityEngine;
-using PlayMaker;
 using System.Collections;
+using UnityEngine.SceneManagement;
+
+public enum Fasi
+{
+    menu,
+    A,
+    B,
+    C
+}
+
+public enum FaseB
+{
+    none,
+    photos,
+    frame,
+    perspective,
+    completed
+}
+
+public enum FaseA
+{
+    none,
+    teddy,
+    tv,
+    diary,
+    completed
+}
 
 public class GameManager : MonoBehaviour
 {
-    public PlayMakerFSM phone;
-    public GameObject elsa;
-    public ButtonSearch events;
+    [SerializeField]
+    private GameObject elsa;
     private Lightmap switchLight;
-    public btnExit btnexit;
+    [SerializeField]
+    private btnExit btnexit;
     private PlayMakerFSM switchLightmap;
-    public PlayMakerFSM faseA3;
-    public PlayMakerFSM tvFine;
-    public bool startJumpscare;
-    public bool timeEventDone;
-    public bool dollEventDone;
-    public bool tvDone;
+    [SerializeField]
+    private GameObject enigmaA3;
+    private PlayMakerFSM enigmaA3FSM;
+    public Fasi fasi = Fasi.menu;
+    public FaseA faseA = FaseA.none;
+    public FaseB faseB = FaseB.none;
 
     // Use this for initialization
     void Start()
     {
         switchLight = GetComponent<Lightmap>();
         switchLightmap = GetComponent<PlayMakerFSM>();
-        timeEventDone = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-        dollEventDone = events.dollDone;
-        startJumpscare = btnexit.on;
-        tvDone = tvFine.GetComponent<PlayMakerFSM>().FsmVariables.GetFsmBool("Fine Televisore").Value;
-
-        if (timeEventDone)
+        SceneManager.sceneLoaded += OnSceneLoaded;
+        switch (fasi)
         {
-            events.faseA2 = false;
-            faseA3.GetComponent<PlayMakerFSM>().FsmVariables.GetFsmBool("Enigma Telecomando").Value = true;
-            //phone.enabled = true;
+            case Fasi.A:
+                {
+                    switch (faseA)
+                    {
+                        case FaseA.diary:
+                            {
+                                enigmaA3FSM.FsmVariables.GetFsmBool("Enigma Telecomando").Value = true;
+                                break;
+                            }
+
+                        case FaseA.teddy:
+                            {
+                                enigmaA3FSM.FsmVariables.GetFsmBool("Enigma Telecomando").Value = true;
+                                break;
+                            }
+
+                        case FaseA.none:
+                            {
+                                if (btnexit != null && btnexit.on)
+                                {
+                                    switchLightmap.SendEvent("JumpScareClock");
+                                    btnexit.on = false;
+                                }
+
+                                break;
+                            }
+
+                        default:
+                            {
+                                break;
+                            }
+                    }
+                    break;
+                }
+
+            case Fasi.B:
+                {
+
+                    break;
+                }
+
+            case Fasi.C: { break; }
         }
 
-        if (dollEventDone)
-        {
-            events.faseA1 = false;
-            faseA3.GetComponent<PlayMakerFSM>().FsmVariables.GetFsmBool("Enigma Telecomando").Value = true;
-            //phone.enabled = true;
-        }
 
-        if (startJumpscare && !timeEventDone)
-        {
-            switchLightmap.SendEvent("JumpScareClock");
-            startJumpscare = false;
-            timeEventDone = true;
-        }
 
-        if(tvDone)
-        {
-            events.faseA1 = false;
-            events.faseA2 = false;
-            //phone.enabled = true;
-        }
+
+
+
 
     }
 
@@ -72,13 +118,31 @@ public class GameManager : MonoBehaviour
 
     public IEnumerator DeathLightmap()
     {
-        GetComponent<Lightmap>().SetLightmapDark();
+        switchLight.SetLightmapDark();
         yield return new WaitForSeconds(0.5f);
-        GetComponent<Lightmap>().SetLightmapNormal();
+        switchLight.SetLightmapNormal();
     }
 
-    public void avviaCoroutine()
+    public void avviaCoroutine(float wait, GameObject elsa)
     {
-        StartCoroutine(DeathElsa(1f, elsa));
+        StartCoroutine(DeathElsa(wait, elsa));
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+       
+        if (scene.buildIndex == 1)
+        {
+            enigmaA3 = GameObject.FindGameObjectWithTag("EnigmaA3");
+            enigmaA3FSM = enigmaA3.GetComponent<PlayMakerFSM>();
+            btnexit = GameObject.FindGameObjectWithTag("BtnExit").GetComponent<btnExit>();
+            btnexit.audioSlam = switchLightmap.FsmVariables.GetFsmGameObject("Sound effects").Value;
+            btnexit.gameObject.SetActive(false);
+            
+        }
+
+        elsa = GameObject.FindGameObjectWithTag("Elsa");
+        switchLightmap.FsmVariables.GetFsmGameObject("Elsa").Value = elsa;
+        elsa.SetActive(false);
     }
 }

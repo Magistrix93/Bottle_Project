@@ -1,25 +1,28 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 using UnityEngine.UI;
 
 public class ButtonSearch : MonoBehaviour
 {
     //Manager
-    public bool faseA1;
-    public bool faseA2;
-    public bool faseA3;
     public PlayMakerFSM fineTv;
     public GameObject elsa;
-    public GameObject antaDx;
-    public GameObject antaSx;
-    public bool antaDxCheck;
-    public bool antaSxCheck;
+    public GameObject antaDxObj;
+    public GameObject antaSxOgj;
+    private Animation antaDxAnim;
+    private Animation antaSxAnim;
+    private antaDx antaDx;
+    private AntaSx antaSx;
+    [NonSerialized]
     public bool checkDx;
+    [NonSerialized]
     public bool checkSx;
-    public bool tvFine;
-    public GameObject gameManager;
+    private GameObject gameManager;
+    private GameManager gameManagerScript;
     public Sprite searchIconUI;
     public Sprite handIconUI;
+    
 
 
     //Fase A1
@@ -38,11 +41,15 @@ public class ButtonSearch : MonoBehaviour
     public GameObject buttonExit;
     public GameObject btnLeft;
     public GameObject btnRight;
-    private bool myPaper;
-    private bool myDiary;
-    private bool myTime;
+    private CartaCestino myPaper;
+    private Diary myDiary;
+    private Orologio myTime;
+
+    [NonSerialized]
     public bool diaryON = false;
+    [NonSerialized]
     public bool paperON = false;
+    [NonSerialized]
     public bool timeON = false;
 
     //Fase A2
@@ -54,13 +61,12 @@ public class ButtonSearch : MonoBehaviour
     public ClockEvent armadio;
     public AudioSource myAudio;
     public AudioClip tvScary;
-    public bool myDoll;
-    public bool myImgWardr;
-    public bool myDollSlot;
-    public bool dollON;
+    private Doll myDoll;
+    private imgArmadio myImgWardr;
+    public BambolaPosto slotDoll;
+    [NonSerialized]
     public bool slotDollON;
-    public bool knockCheck;
-    public bool dollDone;
+    private bool knockCheck;
 
 
 
@@ -68,41 +74,42 @@ public class ButtonSearch : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        tvFine = fineTv.GetComponent<PlayMakerFSM>().FsmVariables.GetFsmBool("Fine Televisore").Value;
-        faseA1 = true;
-        faseA2 = true;
-        faseA3 = true;
+        gameManager = GameObject.FindGameObjectWithTag("GameManager");
+        gameManagerScript = gameManager.GetComponent<GameManager>();
+
+        if (gameManagerScript.fasi != Fasi.A)
+            enabled = false;
+
         checkDx = true;
         checkSx = true;
+        
+        antaDxAnim = antaDxObj.GetComponent<Animation>();
+        antaSxAnim = antaSxOgj.GetComponent<Animation>();        
+
+        antaDx = antaDxObj.GetComponent<antaDx>();
+        antaSx = antaSxOgj.GetComponent<AntaSx>();
+
+        myDiary = diario.GetComponent<Diary>();
+        myPaper = carta.GetComponent<CartaCestino>();
+        myTime = orologio.GetComponent<Orologio>();
+
+        myDoll = dollobj.GetComponent<Doll>();
+        myImgWardr = imgWardr.GetComponent<imgArmadio>();
+        slotDoll = slotDollobj.GetComponent<BambolaPosto>();
 
     }
 
     // Update is called once per frame
     void Update()
     {
-        antaDxCheck = antaDx.GetComponent<antaDx>().AntaDx;
-        antaSxCheck = antaSx.GetComponent<AntaSx>().antaSx;
-
-        myDiary = diario.GetComponent<Diary>().diaryRead;
-        myPaper = carta.GetComponent<CartaCestino>().paper;
-        myTime = orologio.GetComponent<Orologio>().time;
-
-        myDoll = dollobj.GetComponent<Doll>().doll;
-        myImgWardr = imgWardr.GetComponent<imgArmadio>().imgWardrobe;
-        myDollSlot = slotDollobj.GetComponent<BambolaPosto>().slotDoll;
-        knockCheck = armadio.GetComponent<ClockEvent>().check;
 
     }
 
-
-
-
-
     public void OnClick()
     {
-        if (faseA1 && !tvFine)
+        if (gameManagerScript.faseA == FaseA.none)
         {
-            if (myDiary)
+            if (myDiary.diaryRead)
             {
                 text.SetActive(true);
                 text.GetComponent<Text>().text = "A page is missing.";
@@ -112,7 +119,7 @@ public class ButtonSearch : MonoBehaviour
                 diaryON = true;
             }
 
-            if (myPaper)
+            if (myPaper.paper)
             {
                 note1.GetComponent<Image>().sprite = cartaUI;
                 this.gameObject.SetActive(false);
@@ -120,7 +127,7 @@ public class ButtonSearch : MonoBehaviour
                 paperON = true;
             }
 
-            if (myTime)
+            if (myTime.time)
             {
                 this.gameObject.SetActive(false);
                 mainCam.SetActive(false);
@@ -132,21 +139,17 @@ public class ButtonSearch : MonoBehaviour
                 btnRight.SetActive(true);
                 timeON = true;
             }
-        }
 
-        if (faseA2 && !tvFine)
-        {
-            if (myDoll && !dollON)
+            if (myDoll.doll)
             {
                 note2.SetActive(true);
                 note2.GetComponent<Image>().sprite = dollUI;
                 dollobj.SetActive(false);
                 imgWardr.SetActive(true);
-                dollON = true;
                 this.gameObject.SetActive(false);
             }
 
-            if (myImgWardr)
+            if (myImgWardr.imgWardrobe)
             {
                 note1.SetActive(true);
                 note1.GetComponent<Image>().sprite = imgWardrobeUI;
@@ -154,7 +157,7 @@ public class ButtonSearch : MonoBehaviour
 
             }
 
-            if (myDollSlot && !slotDollON && dollON)
+            if (slotDoll.slotDoll && !slotDollON && !dollobj.activeSelf)
             {
                 note2.GetComponent<Image>().sprite = null;
                 note2.SetActive(false);
@@ -164,45 +167,43 @@ public class ButtonSearch : MonoBehaviour
                 this.gameObject.SetActive(false);
             }
 
-            if (antaSxCheck && checkSx && !antaSx.GetComponent<Animation>().IsPlaying("antaSxRagazzaClose"))
+            if (antaSx.antaSx && checkSx && !antaSxAnim.IsPlaying("antaSxRagazzaClose"))
             {
-                antaSx.GetComponent<Animation>().Play("antaSxRagazza");
+                antaSxAnim.Play("antaSxRagazza");
                 checkSx = false;
 
-                if (knockCheck)
+                if (armadio.check)
                 {
                     armadio.check = false;
                     elsa.GetComponent<Animator>().SetTrigger("IsScream");
                     myAudio.Play();
-                    gameManager.GetComponent<GameManager>().avviaCoroutine();
+                    gameManagerScript.avviaCoroutine(1f, elsa);
                     armadio.enabled = false;
-                    dollDone = true;
+                    gameManagerScript.faseA = FaseA.teddy;
+
 
                 }
-
             }
 
-            if (antaSxCheck && !checkSx && !antaSx.GetComponent<Animation>().IsPlaying("antaSxRagazza"))
+            if (antaSx.antaSx && !checkSx && !antaSxAnim.IsPlaying("antaSxRagazza"))
             {
-                antaSx.GetComponent<Animation>().Play("antaSxRagazzaClose");
+                antaSxAnim.Play("antaSxRagazzaClose");
                 checkSx = true;
             }
 
-            if (antaDxCheck && checkSx && !antaSx.GetComponent<Animation>().IsPlaying("antaDxRagazzaClose"))
+            if (antaDx.AntaDx && checkDx && !antaDxAnim.IsPlaying("Mobile 4 Close"))
             {
-                antaDx.GetComponent<Animation>().Play("antaDxRagazza");
+                antaDxAnim.Play("Mobile 4 Open");
                 checkDx = false;
             }
 
-            if (antaDxCheck && !checkSx && !antaSx.GetComponent<Animation>().IsPlaying("antaDxRagazza"))
+            if (antaDx.AntaDx && !checkDx && !antaDxAnim.IsPlaying("Mobile 4 Open"))
             {
-                antaDx.GetComponent<Animation>().Play("antaDxRagazzaClose");
+                antaDxAnim.Play("Mobile 4 Close");
                 checkDx = true;
             }
-
-
-
         }
+
 
         
     }

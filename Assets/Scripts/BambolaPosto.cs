@@ -2,35 +2,48 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class BambolaPosto : MonoBehaviour {
+public class BambolaPosto : MonoBehaviour
+{
 
     private PlayMakerFSM myFsm;
     public bool slotDoll;
     private bool activated = true;
     public GameObject button;
+    private GameObject gameManager;
+    private GameManager gameManagerScript;
+    private ButtonSearch buttonScript;
 
     // Use this for initialization
     void Start()
     {
         myFsm = GetComponent<PlayMakerFSM>();
+        gameManager = GameObject.FindGameObjectWithTag("GameManager");
+        gameManagerScript = gameManager.GetComponent<GameManager>();
+        if (gameManagerScript.fasi != Fasi.A)
+            this.enabled = false;
+        buttonScript = button.GetComponent<ButtonSearch>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        slotDoll = myFsm.FsmVariables.GetFsmBool("StartOpen").Value;
-
-        if (slotDoll && activated)
+        if (gameManagerScript.faseA == FaseA.none)
         {
-            button.GetComponent<Image>().sprite = button.GetComponent<ButtonSearch>().handIconUI;
-            button.SetActive(true);
-            activated = false;
+            slotDoll = myFsm.FsmVariables.GetFsmBool("StartOpen").Value;
+
+            if (slotDoll && activated && !buttonScript.dollobj.activeSelf)
+            {
+                button.GetComponent<Image>().sprite = buttonScript.handIconUI;
+                button.SetActive(true);
+                activated = false;
+            }
+
+            else if (!slotDoll && !activated)
+            {
+                button.SetActive(false);
+                activated = true;
+            }
         }
 
-        else if (!slotDoll && !activated)
-        {
-            button.SetActive(false);
-            activated = true;
-        }
     }
 }
