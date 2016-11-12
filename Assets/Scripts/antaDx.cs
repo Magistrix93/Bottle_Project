@@ -7,11 +7,13 @@ public class antaDx : MonoBehaviour {
     public bool AntaDx;
     private bool activated = true;
     public GameObject button;
+    public AudioSource[] sounds;
 
     // Use this for initialization
     void Start()
     {
         myFsm = GetComponent<PlayMakerFSM>();
+        sounds = GetComponents<AudioSource>();
     }
 
     // Update is called once per frame

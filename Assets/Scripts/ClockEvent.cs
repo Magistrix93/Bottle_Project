@@ -61,6 +61,7 @@ public class ClockEvent : MonoBehaviour
             if (!antaCheck)
             {
                 anta.GetComponent<Animation>().Play("antaSxRagazzaClose");
+                anta.GetComponent<AntaSx>().sounds[1].Play();
                 button.GetComponent<ButtonSearch>().checkSx = true;
             }
 

@@ -10,6 +10,15 @@ public enum Fasi
     C
 }
 
+public enum FaseA
+{
+    none,
+    teddy,
+    tv,
+    diary,
+    completed
+}
+
 public enum FaseB
 {
     none,
@@ -19,12 +28,17 @@ public enum FaseB
     completed
 }
 
-public enum FaseA
+public enum FaseC
 {
     none,
-    teddy,
-    tv,
-    diary,
+    completed
+}
+
+public enum FasiEnigmaLavagna
+{
+    trovaFoto,
+    inquadraLavagna,
+    ImHere,
     completed
 }
 
@@ -39,15 +53,27 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private GameObject enigmaA3;
     private PlayMakerFSM enigmaA3FSM;
+    public GameObject phone;
     public Fasi fasi = Fasi.menu;
     public FaseA faseA = FaseA.none;
     public FaseB faseB = FaseB.none;
+    public FaseC faseC = FaseC.none;
+
+    public bool[] photos;
+
+    public bool[] ovenClue;
+
+    public bool framedFound;
+
+    public FasiEnigmaLavagna enigmaLavagna = FasiEnigmaLavagna.trovaFoto;
 
     // Use this for initialization
     void Start()
     {
         switchLight = GetComponent<Lightmap>();
         switchLightmap = GetComponent<PlayMakerFSM>();
+        photos = new bool[4];
+        ovenClue = new bool[2];
     }
 
     // Update is called once per frame
@@ -84,20 +110,17 @@ public class GameManager : MonoBehaviour
                             }
 
                         default:
-                            {
-                                break;
-                            }
+                            { break; }
                     }
                     break;
                 }
 
             case Fasi.B:
-                {
+                { break; }
 
-                    break;
-                }
-
-            case Fasi.C: { break; }
+            
+            case Fasi.C:
+                { break; }
         }
 
 
@@ -130,7 +153,7 @@ public class GameManager : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-       
+
         if (scene.buildIndex == 1)
         {
             enigmaA3 = GameObject.FindGameObjectWithTag("EnigmaA3");
@@ -138,9 +161,15 @@ public class GameManager : MonoBehaviour
             btnexit = GameObject.FindGameObjectWithTag("BtnExit").GetComponent<btnExit>();
             btnexit.audioSlam = switchLightmap.FsmVariables.GetFsmGameObject("Sound effects").Value;
             btnexit.gameObject.SetActive(false);
-            
         }
 
+        if (scene.buildIndex == 2)
+        {
+
+        }
+
+
+        phone = GameObject.FindGameObjectWithTag("Phone");
         elsa = GameObject.FindGameObjectWithTag("Elsa");
         switchLightmap.FsmVariables.GetFsmGameObject("Elsa").Value = elsa;
         elsa.SetActive(false);

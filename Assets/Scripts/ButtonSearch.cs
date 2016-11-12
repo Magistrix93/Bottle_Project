@@ -22,6 +22,7 @@ public class ButtonSearch : MonoBehaviour
     private GameManager gameManagerScript;
     public Sprite searchIconUI;
     public Sprite handIconUI;
+    private GameObject phone;
     
 
 
@@ -47,7 +48,7 @@ public class ButtonSearch : MonoBehaviour
 
     [NonSerialized]
     public bool diaryON = false;
-    [NonSerialized]
+
     public bool paperON = false;
     [NonSerialized]
     public bool timeON = false;
@@ -59,8 +60,8 @@ public class ButtonSearch : MonoBehaviour
     public Sprite dollUI;
     public GameObject slotDollobj;
     public ClockEvent armadio;
-    public AudioSource myAudio;
-    public AudioClip tvScary;
+    private GameObject soundEffects;
+    private AudioSource[] myAudio;
     private Doll myDoll;
     private imgArmadio myImgWardr;
     public BambolaPosto slotDoll;
@@ -76,6 +77,8 @@ public class ButtonSearch : MonoBehaviour
     {
         gameManager = GameObject.FindGameObjectWithTag("GameManager");
         gameManagerScript = gameManager.GetComponent<GameManager>();
+
+        phone = GameObject.FindGameObjectWithTag("Phone");
 
         if (gameManagerScript.fasi != Fasi.A)
             enabled = false;
@@ -97,6 +100,9 @@ public class ButtonSearch : MonoBehaviour
         myImgWardr = imgWardr.GetComponent<imgArmadio>();
         slotDoll = slotDollobj.GetComponent<BambolaPosto>();
 
+        soundEffects = gameManager.GetComponent<PlayMakerFSM>().FsmVariables.GetFsmGameObject("Sound effects").Value;
+        myAudio = soundEffects.GetComponents<AudioSource>();
+
     }
 
     // Update is called once per frame
@@ -114,7 +120,7 @@ public class ButtonSearch : MonoBehaviour
                 text.SetActive(true);
                 text.GetComponent<Text>().text = "A page is missing.";
                 note1.GetComponent<Image>().sprite = diaryUI;
-                this.gameObject.SetActive(false);
+                gameObject.SetActive(false);
                 note1.SetActive(true);
                 diaryON = true;
             }
@@ -122,14 +128,14 @@ public class ButtonSearch : MonoBehaviour
             if (myPaper.paper)
             {
                 note1.GetComponent<Image>().sprite = cartaUI;
-                this.gameObject.SetActive(false);
+                gameObject.SetActive(false);
                 note1.SetActive(true);
                 paperON = true;
             }
 
             if (myTime.time)
             {
-                this.gameObject.SetActive(false);
+                gameObject.SetActive(false);
                 mainCam.SetActive(false);
                 camTime.SetActive(true);
                 controller1.GetComponent<Image>().enabled = false;
@@ -144,16 +150,18 @@ public class ButtonSearch : MonoBehaviour
             {
                 note2.SetActive(true);
                 note2.GetComponent<Image>().sprite = dollUI;
+                myAudio[10].Play();
+                myDoll.doll = false;
                 dollobj.SetActive(false);
                 imgWardr.SetActive(true);
-                this.gameObject.SetActive(false);
+                gameObject.SetActive(false);
             }
 
             if (myImgWardr.imgWardrobe)
             {
                 note1.SetActive(true);
                 note1.GetComponent<Image>().sprite = imgWardrobeUI;
-                this.gameObject.SetActive(false);
+                gameObject.SetActive(false);
 
             }
 
@@ -164,11 +172,12 @@ public class ButtonSearch : MonoBehaviour
                 dollobj.transform.position = new Vector3(slotDollobj.transform.position.x, slotDollobj.transform.position.y - 1.2f, slotDollobj.transform.position.z);
                 dollobj.SetActive(true);
                 slotDollON = true;
-                this.gameObject.SetActive(false);
+                gameObject.SetActive(false);
             }
 
             if (antaSx.antaSx && checkSx && !antaSxAnim.IsPlaying("antaSxRagazzaClose"))
             {
+                antaSx.sounds[0].Play();
                 antaSxAnim.Play("antaSxRagazza");
                 checkSx = false;
 
@@ -176,9 +185,10 @@ public class ButtonSearch : MonoBehaviour
                 {
                     armadio.check = false;
                     elsa.GetComponent<Animator>().SetTrigger("IsScream");
-                    myAudio.Play();
+                    myAudio[6].Play();
                     gameManagerScript.avviaCoroutine(1f, elsa);
                     armadio.enabled = false;
+                    phone.GetComponent<PlayMakerFSM>().SendEvent("Phone Ring");
                     gameManagerScript.faseA = FaseA.teddy;
 
 
@@ -188,18 +198,21 @@ public class ButtonSearch : MonoBehaviour
             if (antaSx.antaSx && !checkSx && !antaSxAnim.IsPlaying("antaSxRagazza"))
             {
                 antaSxAnim.Play("antaSxRagazzaClose");
+                antaSx.sounds[1].Play();
                 checkSx = true;
             }
 
             if (antaDx.AntaDx && checkDx && !antaDxAnim.IsPlaying("Mobile 4 Close"))
             {
                 antaDxAnim.Play("Mobile 4 Open");
+                antaDx.sounds[0].Play();
                 checkDx = false;
             }
 
             if (antaDx.AntaDx && !checkDx && !antaDxAnim.IsPlaying("Mobile 4 Open"))
             {
                 antaDxAnim.Play("Mobile 4 Close");
+                antaDx.sounds[1].Play();
                 checkDx = true;
             }
         }

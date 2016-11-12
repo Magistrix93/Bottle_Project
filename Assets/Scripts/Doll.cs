@@ -19,7 +19,7 @@ public class Doll : MonoBehaviour
         gameManager = GameObject.FindGameObjectWithTag("GameManager");
         gameManagerScript = gameManager.GetComponent<GameManager>();
         if (gameManagerScript.fasi != Fasi.A)
-            this.enabled = false;
+            enabled = false;
     }
 
     // Update is called once per frame
@@ -44,4 +44,5 @@ public class Doll : MonoBehaviour
         }
 
     }
+
 }

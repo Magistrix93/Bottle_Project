@@ -20,7 +20,7 @@ public class BambolaPosto : MonoBehaviour
         gameManager = GameObject.FindGameObjectWithTag("GameManager");
         gameManagerScript = gameManager.GetComponent<GameManager>();
         if (gameManagerScript.fasi != Fasi.A)
-            this.enabled = false;
+            enabled = false;
         buttonScript = button.GetComponent<ButtonSearch>();
     }
 
