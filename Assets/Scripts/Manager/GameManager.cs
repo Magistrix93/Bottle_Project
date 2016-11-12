@@ -45,7 +45,7 @@ public enum FasiEnigmaLavagna
 public class GameManager : MonoBehaviour
 {
     [SerializeField]
-    private GameObject elsa;
+    public GameObject elsa;
     private Lightmap switchLight;
     [SerializeField]
     private btnExit btnexit;
