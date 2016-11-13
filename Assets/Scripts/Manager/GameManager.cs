@@ -45,7 +45,7 @@ public enum FasiEnigmaLavagna
 public class GameManager : MonoBehaviour
 {
     [SerializeField]
-    private GameObject elsa;
+    public GameObject elsa;
     private Lightmap switchLight;
     [SerializeField]
     private btnExit btnexit;
@@ -74,12 +74,13 @@ public class GameManager : MonoBehaviour
         switchLightmap = GetComponent<PlayMakerFSM>();
         photos = new bool[4];
         ovenClue = new bool[2];
+        SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
     // Update is called once per frame
     void Update()
     {
-        SceneManager.sceneLoaded += OnSceneLoaded;
+        
         switch (fasi)
         {
             case Fasi.A:
@@ -122,13 +123,6 @@ public class GameManager : MonoBehaviour
             case Fasi.C:
                 { break; }
         }
-
-
-
-
-
-
-
     }
 
     public IEnumerator DeathElsa(float wait, GameObject elsa)
