@@ -34,7 +34,7 @@ public class ClockEvent : MonoBehaviour
     void Update()
     {
 
-        antaCheck = button.GetComponent<ButtonSearch>().checkSx;
+        antaCheck = anta.GetComponent<AntaSx>().checkSx;
         
         if (coroutineGo)
             StartCoroutine(waitDoor());
@@ -62,7 +62,7 @@ public class ClockEvent : MonoBehaviour
             {
                 anta.GetComponent<Animation>().Play("antaSxRagazzaClose");
                 anta.GetComponent<AntaSx>().sounds[1].Play();
-                button.GetComponent<ButtonSearch>().checkSx = true;
+                anta.GetComponent<Items>().OnClicked();
             }
 
             check = true;

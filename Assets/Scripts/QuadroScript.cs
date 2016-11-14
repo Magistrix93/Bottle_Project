@@ -2,21 +2,24 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class Doll : Items
+public class QuadroScript : Items
 {
-
     private PlayMakerFSM myFsm;
-
-    public GameObject note2;
-    public GameObject imgWardr;
-    public bool doll;
-    public Sprite dollUI;
-    private bool activated = true;
-    public GameObject button;
     private GameObject gameManager;
     private GameManager gameManagerScript;
     private GameObject soundEffects;
     public AudioSource[] myAudio;
+
+    public Material fotoCompleta;
+    public GameObject note2;
+    public GameObject text1;
+    private PhotoCounter photo;
+    public GameObject button;
+    public GameObject trigElsa;
+    public GameObject trigDoor2;
+    public bool quadro;
+    public bool stepQuadro;
+    private bool activated;
 
     // Use this for initialization
     void Start()
@@ -26,19 +29,20 @@ public class Doll : Items
         gameManagerScript = gameManager.GetComponent<GameManager>();
         soundEffects = gameManager.GetComponent<PlayMakerFSM>().FsmVariables.GetFsmGameObject("Sound effects").Value;
         myAudio = soundEffects.GetComponents<AudioSource>();
+        photo = text1.GetComponent<PhotoCounter>();
 
-        if (gameManagerScript.fasi != Fasi.A)
+        if (gameManagerScript.fasi != Fasi.B)
             enabled = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (gameManagerScript.faseA == FaseA.none)
+        if (gameManagerScript.faseB == FaseB.none)
         {
-            doll = myFsm.FsmVariables.GetFsmBool("StartOpen").Value;
+            quadro = myFsm.FsmVariables.GetFsmBool("StartOpen").Value;
 
-            if (doll && activated)
+            if (quadro && activated)
             {
                 button.GetComponent<ButtonSearch>().rayObject = this.gameObject;
                 button.GetComponent<Image>().sprite = button.GetComponent<ButtonSearch>().handIconUI;
@@ -46,7 +50,7 @@ public class Doll : Items
                 activated = false;
             }
 
-            else if (!doll && !activated)
+            else if (!quadro && !activated)
             {
                 button.SetActive(false);
                 activated = true;
@@ -56,13 +60,18 @@ public class Doll : Items
 
     public override void OnClicked()
     {
-        note2.SetActive(true);
-        note2.GetComponent<Image>().sprite = dollUI;
-        myAudio[10].Play();
-        imgWardr.SetActive(true);
-        button.SetActive(false);
-        doll = false;
-        gameObject.SetActive(false);
+        if(!stepQuadro && gameManagerScript.photos[0] && gameManagerScript.photos[1] && gameManagerScript.photos[2] && gameManagerScript.photos[3])
+        {
+            gameObject.GetComponent<Renderer>().material = fotoCompleta;
+            stepQuadro = true;
+            trigElsa.SetActive(true);
+            trigDoor2.SetActive(true);
+            note2.SetActive(false);
+            text1.SetActive(false);
+            myAudio[10].Play();
+            gameObject.GetComponent<AudioSource>().Play();
+            button.SetActive(false);
+        }
+       
     }
-
 }

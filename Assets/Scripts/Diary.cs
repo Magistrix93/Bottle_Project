@@ -1,14 +1,17 @@
 ﻿using UnityEngine;
+using System;
 using UnityEngine.UI;
 using System.Collections;
 
-public class Diary : MonoBehaviour
+public class Diary : Items
 {
-
-
+   
+    public GameObject text;
     private PlayMakerFSM myFsm;
+    public Sprite diaryUI;
     public bool diaryRead;
     private bool activated = true;
+    public bool diaryON;
     public GameObject button;
     public GameObject note1;
     private GameObject gameManager;
@@ -34,6 +37,7 @@ public class Diary : MonoBehaviour
 
             if (diaryRead && activated)
             {
+                button.GetComponent<ButtonSearch>().rayObject = this.gameObject;
                 button.GetComponent<Image>().sprite = button.GetComponent<ButtonSearch>().searchIconUI;
                 button.SetActive(true);
                 activated = false;
@@ -41,13 +45,23 @@ public class Diary : MonoBehaviour
 
             else if (!diaryRead && !activated)
             {
-                button.GetComponent<ButtonSearch>().text.SetActive(false);
-                button.GetComponent<ButtonSearch>().text.GetComponent<Text>().text = "";
+                text.SetActive(false);
+                text.GetComponent<Text>().text = "";
                 button.SetActive(false);
                 activated = true;
                 note1.SetActive(false);
             }
         }
 
+    }
+
+    public override void OnClicked()
+    {
+        text.SetActive(true);
+        text.GetComponent<Text>().text = "A page is missing.";
+        note1.GetComponent<Image>().sprite = diaryUI;
+        button.SetActive(false);
+        note1.SetActive(true);
+        diaryON = true;
     }
 }

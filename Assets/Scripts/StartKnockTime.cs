@@ -4,7 +4,7 @@ using System.Collections;
 public class StartKnockTime : MonoBehaviour
 {
 
-    public GameObject button;
+    public GameObject slotDoll;
     public bool trigOn;
     public ClockEvent startTime;
 
@@ -17,7 +17,7 @@ public class StartKnockTime : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        trigOn = button.GetComponent<ButtonSearch>().slotDollON;
+        trigOn = slotDoll.GetComponent<BambolaPosto>().slotDollON;
     }
 
     void OnTriggerEnter(Collider other)

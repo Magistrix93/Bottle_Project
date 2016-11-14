@@ -2,21 +2,23 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class Doll : Items
+public class PhotoScript : Items
 {
 
     private PlayMakerFSM myFsm;
-
-    public GameObject note2;
-    public GameObject imgWardr;
-    public bool doll;
-    public Sprite dollUI;
-    private bool activated = true;
-    public GameObject button;
     private GameObject gameManager;
     private GameManager gameManagerScript;
+
+    public int photoN;
+    public bool photo;
+    private bool activated;
+    public GameObject button;
+
+    public GameObject note2;
     private GameObject soundEffects;
     public AudioSource[] myAudio;
+    public Sprite photoUI;
+    public GameObject text1;
 
     // Use this for initialization
     void Start()
@@ -24,21 +26,25 @@ public class Doll : Items
         myFsm = GetComponent<PlayMakerFSM>();
         gameManager = GameObject.FindGameObjectWithTag("GameManager");
         gameManagerScript = gameManager.GetComponent<GameManager>();
+
         soundEffects = gameManager.GetComponent<PlayMakerFSM>().FsmVariables.GetFsmGameObject("Sound effects").Value;
         myAudio = soundEffects.GetComponents<AudioSource>();
 
-        if (gameManagerScript.fasi != Fasi.A)
-            enabled = false;
+        //if (gameManagerScript.fasi != Fasi.B)
+        //    Destroy(gameObject);
+
+        if (gameManagerScript.photos[photoN])
+            Destroy(gameObject);       
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (gameManagerScript.faseA == FaseA.none)
+        if (gameManagerScript.faseB == FaseB.none)
         {
-            doll = myFsm.FsmVariables.GetFsmBool("StartOpen").Value;
+            photo = myFsm.FsmVariables.GetFsmBool("StartOpen").Value;           
 
-            if (doll && activated)
+            if (photo && activated)
             {
                 button.GetComponent<ButtonSearch>().rayObject = this.gameObject;
                 button.GetComponent<Image>().sprite = button.GetComponent<ButtonSearch>().handIconUI;
@@ -46,23 +52,25 @@ public class Doll : Items
                 activated = false;
             }
 
-            else if (!doll && !activated)
+            else if (!photo && !activated)
             {
                 button.SetActive(false);
                 activated = true;
-            }
+            }           
         }
     }
 
     public override void OnClicked()
     {
+        gameManagerScript.photos[photoN] = true;
+        text1.GetComponent<PhotoCounter>().photoTook++;
         note2.SetActive(true);
-        note2.GetComponent<Image>().sprite = dollUI;
+        note2.GetComponent<Image>().sprite = photoUI;
+        text1.SetActive(true);
+        text1.GetComponent<PhotoCounter>().UpdateText();
         myAudio[10].Play();
-        imgWardr.SetActive(true);
-        button.SetActive(false);
-        doll = false;
         gameObject.SetActive(false);
+        button.SetActive(false);
+        photo = false;
     }
-
 }

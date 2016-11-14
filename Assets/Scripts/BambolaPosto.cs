@@ -2,11 +2,13 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class BambolaPosto : MonoBehaviour
+public class BambolaPosto : Items
 {
-
+    public GameObject note2;
+    public GameObject dollobj;
     private PlayMakerFSM myFsm;
     public bool slotDoll;
+    public bool slotDollON;
     private bool activated = true;
     public GameObject button;
     private GameObject gameManager;
@@ -31,8 +33,9 @@ public class BambolaPosto : MonoBehaviour
         {
             slotDoll = myFsm.FsmVariables.GetFsmBool("StartOpen").Value;
 
-            if (slotDoll && activated && !buttonScript.dollobj.activeSelf)
+            if (slotDoll && activated && !dollobj.activeSelf)
             {
+                button.GetComponent<ButtonSearch>().rayObject = this.gameObject;
                 button.GetComponent<Image>().sprite = buttonScript.handIconUI;
                 button.SetActive(true);
                 activated = false;
@@ -45,5 +48,15 @@ public class BambolaPosto : MonoBehaviour
             }
         }
 
+    }
+
+    public override void OnClicked()
+    {
+        slotDollON = true;
+        note2.GetComponent<Image>().sprite = null;
+        note2.SetActive(false);
+        dollobj.transform.position = new Vector3(this.transform.position.x, this.transform.position.y - 1.2f, this.transform.position.z);
+        dollobj.SetActive(true);
+        gameObject.SetActive(false);
     }
 }
