@@ -80,7 +80,7 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
         switch (fasi)
         {
             case Fasi.A:
@@ -119,7 +119,7 @@ public class GameManager : MonoBehaviour
             case Fasi.B:
                 { break; }
 
-            
+
             case Fasi.C:
                 { break; }
         }
@@ -147,6 +147,49 @@ public class GameManager : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        phone = GameObject.FindGameObjectWithTag("Phone");
+        elsa = GameObject.FindGameObjectWithTag("Elsa");
+        switchLightmap.FsmVariables.GetFsmGameObject("Elsa").Value = elsa;
+        elsa.SetActive(false);
+
+        switch (fasi)
+        {
+            case Fasi.A:
+                {
+                    switch (faseA)
+                    {
+                        case FaseA.none: { break; }
+
+                        case FaseA.completed: { break; }
+
+                        default:
+                            {
+                                phone.GetComponent<PlayMakerFSM>().SendEvent("Phone Ring");
+                                break;
+                            }
+                    }
+                    break;
+                }
+            case Fasi.B:
+                {
+                    switch (faseB)
+                    {
+                        case FaseB.none: { break; }
+
+                        case FaseB.completed: { break; };
+
+                        default:
+                            {
+                                phone.GetComponent<PlayMakerFSM>().SendEvent("Phone Ring");
+                                break;
+                            }
+                    }
+                    break;
+                }
+            case Fasi.C: { break; }
+
+        }
+
 
         if (scene.buildIndex == 1)
         {
@@ -163,9 +206,6 @@ public class GameManager : MonoBehaviour
         }
 
 
-        phone = GameObject.FindGameObjectWithTag("Phone");
-        elsa = GameObject.FindGameObjectWithTag("Elsa");
-        switchLightmap.FsmVariables.GetFsmGameObject("Elsa").Value = elsa;
-        elsa.SetActive(false);
+
     }
 }
