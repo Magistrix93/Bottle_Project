@@ -10,6 +10,7 @@ public class Doll : Items
     public GameObject note2;
     public GameObject imgWardr;
     public bool doll;
+    public bool dollTaken;
     public Sprite dollUI;
     private bool activated = true;
     public GameObject button;
@@ -34,7 +35,7 @@ public class Doll : Items
     // Update is called once per frame
     void Update()
     {
-        if (gameManagerScript.faseA == FaseA.none)
+        if (gameManagerScript.faseA == FaseA.none && !dollTaken)
         {
             doll = myFsm.FsmVariables.GetFsmBool("StartOpen").Value;
 
@@ -56,6 +57,7 @@ public class Doll : Items
 
     public override void OnClicked()
     {
+        dollTaken = true;
         note2.SetActive(true);
         note2.GetComponent<Image>().sprite = dollUI;
         myAudio[10].Play();

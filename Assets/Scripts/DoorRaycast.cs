@@ -5,7 +5,7 @@ using System.Collections;
 public class DoorRaycast : MonoBehaviour
 {
     private RaycastHit hit;
-    private GameObject thisCast, lateCast;
+    public GameObject thisCast, lateCast;
     private int layerMask;
 
     // Use this for initialization
@@ -28,14 +28,22 @@ public class DoorRaycast : MonoBehaviour
                 }
 
                 lateCast = thisCast;
+
+                if (lateCast.GetComponent<PlayMakerFSM>() != null)
+                    lateCast.GetComponent<PlayMakerFSM>().FsmVariables.GetFsmBool("StartOpen").Value = true;
+
             }
 
-            lateCast.GetComponent<PlayMakerFSM>().FsmVariables.GetFsmBool("StartOpen").Value = true;
+            
 
         }
 
         else if (lateCast != null)
-            lateCast.GetComponent<PlayMakerFSM>().FsmVariables.GetFsmBool("StartOpen").Value = false;
+        {
+            if(lateCast.GetComponent<PlayMakerFSM>() != null)
+                lateCast.GetComponent<PlayMakerFSM>().FsmVariables.GetFsmBool("StartOpen").Value = false;
+            lateCast = null;
+        }
 
 
     }

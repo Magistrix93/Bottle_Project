@@ -30,8 +30,8 @@ public class PhotoScript : Items
         soundEffects = gameManager.GetComponent<PlayMakerFSM>().FsmVariables.GetFsmGameObject("Sound effects").Value;
         myAudio = soundEffects.GetComponents<AudioSource>();
 
-        //if (gameManagerScript.fasi != Fasi.B)
-        //    Destroy(gameObject);
+        if (gameManagerScript.fasi != Fasi.B)
+            Destroy(gameObject);
 
         if (gameManagerScript.photos[photoN])
             Destroy(gameObject);       

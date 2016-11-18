@@ -13,7 +13,7 @@ public class ClockEvent : MonoBehaviour
     public GameObject button;
     public GameObject anta;
     public GameObject dollOBJ;
-    public GameObject elsa;
+    private GameObject elsa;
     public GameObject player;
     public bool antaCheck;
     public AudioSource myAudio;
@@ -23,30 +23,42 @@ public class ClockEvent : MonoBehaviour
     public bool isInCoroutine;
     public bool scaryStep = false;
     public bool coroutineGo = true;
+    private GameObject gameManager;
+    private GameManager gameManagerScript;
 
 
 
     void Start()
     {
         delay = 30;
+        gameManager = GameObject.FindGameObjectWithTag("GameManager");
+        gameManagerScript = gameManager.GetComponent<GameManager>();
+        elsa = gameManagerScript.elsa;
     }
 
     void Update()
     {
-
-        antaCheck = anta.GetComponent<AntaSx>().checkSx;
-        
-        if (coroutineGo)
-            StartCoroutine(waitDoor());
-
-        if (check)
+        if(gameManagerScript.faseA == FaseA.none)
         {
-            if (!isInCoroutine)
-            {
-                StartCoroutine(TenSeconds());
-            }
+            antaCheck = anta.GetComponent<AntaSx>().checkSx;
 
+            if (coroutineGo)
+                StartCoroutine(waitDoor());
+
+            if (check)
+            {
+                if (!isInCoroutine)
+                {
+                    StartCoroutine(TenSeconds());
+                }
+
+            }
         }
+        else
+        {
+            StopAllCoroutines();
+        }
+        
 
             
     }
@@ -60,8 +72,6 @@ public class ClockEvent : MonoBehaviour
         {
             if (!antaCheck)
             {
-                anta.GetComponent<Animation>().Play("antaSxRagazzaClose");
-                anta.GetComponent<AntaSx>().sounds[1].Play();
                 anta.GetComponent<Items>().OnClicked();
             }
 
@@ -86,12 +96,15 @@ public class ClockEvent : MonoBehaviour
 
     public IEnumerator wait()
     {
-        yield return new WaitForSeconds(3f);
+        anta.GetComponent<AntaSx>().enabled = false;
+        yield return new WaitForSeconds(1f);
         dollOBJ.SetActive(false);
         elsa.SetActive(true);
         elsa.transform.position = new Vector3(dollOBJ.transform.position.x, dollOBJ.transform.position.y + 0.5f, dollOBJ.transform.position.z + 0.45f);
         elsa.transform.rotation = Quaternion.Euler(0, -190, 0);
         scaryStep = true;
+        anta.GetComponent<AntaSx>().enabled = true;
+
     }
 
    

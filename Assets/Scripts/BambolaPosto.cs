@@ -14,6 +14,8 @@ public class BambolaPosto : Items
     private GameObject gameManager;
     private GameManager gameManagerScript;
     private ButtonSearch buttonScript;
+    private GameObject soundeffect;
+    private AudioSource[] audios;
 
     // Use this for initialization
     void Start()
@@ -24,6 +26,9 @@ public class BambolaPosto : Items
         if (gameManagerScript.fasi != Fasi.A)
             enabled = false;
         buttonScript = button.GetComponent<ButtonSearch>();
+        soundeffect = gameManager.GetComponent<PlayMakerFSM>().FsmVariables.GetFsmGameObject("Sound effects").Value;
+        audios = soundeffect.GetComponents<AudioSource>();
+
     }
 
     // Update is called once per frame
@@ -55,8 +60,10 @@ public class BambolaPosto : Items
         slotDollON = true;
         note2.GetComponent<Image>().sprite = null;
         note2.SetActive(false);
-        dollobj.transform.position = new Vector3(this.transform.position.x, this.transform.position.y - 1.2f, this.transform.position.z);
         dollobj.SetActive(true);
+        dollobj.transform.position = new Vector3(this.transform.position.x, this.transform.position.y - 1.2f, this.transform.position.z);
+        button.SetActive(false);
         gameObject.SetActive(false);
+        audios[10].Play();
     }
 }

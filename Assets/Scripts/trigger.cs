@@ -10,18 +10,14 @@ public class trigger : MonoBehaviour
     public AudioSource[] myAudio;
 
     private GameObject elsa;
-    public GameObject elsaTarget1;
     private GameObject player;
     public GameObject elsaTarget;
     private Vector3 elsaPos;
     private float distance;
-    public bool triggered;
-    public bool doorClose;
     private bool trigDone;
     private bool startMove;
     private bool startMove2;
-    private bool startMove3;
-    private bool startMove4;
+
     // Use this for initialization
     void Start()
     {
@@ -67,51 +63,12 @@ public class trigger : MonoBehaviour
             if (elsa.transform.position == elsaPos)
                 startMove2 = false;
         }
-
-        if (startMove3)
-        {
-            elsa.GetComponent<Animator>().SetBool("IsWalk", true);
-            if (!startMove4)
-            {
-                elsa.transform.position = Vector3.MoveTowards(elsa.transform.position, elsaTarget1.transform.position, 8f * Time.deltaTime);
-            }
-
-            if (elsa.transform.position == elsaTarget1.transform.position)
-            {
-                startMove4 = true;
-            }
-
-            if(startMove4)
-            {
-                elsa.transform.rotation = Quaternion.Slerp(elsa.transform.rotation, Quaternion.LookRotation(player.transform.position - elsa.transform.position), (5f * Time.deltaTime));
-                elsa.transform.position = Vector3.MoveTowards(elsa.transform.position, new Vector3(player.transform.position.x, (player.transform.position.y - 1.54f), player.transform.position.z), 8f * Time.deltaTime);
-            }
-
-
-            if (distance < 2 && !elsa.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("Scream"))
-            {
-                elsa.GetComponent<Animator>().SetTrigger("IsScream");
-                myAudio[6].Play();
-                gameManagerScript.avviaCoroutine(1f, elsa);
-                gameManagerScript.faseB = FaseB.photos;
-                startMove3 = false;
-                startMove4 = false;
-            }
-        }
-
-
     }
 
-    //private IEnumerator ElsaScary2()
-    //{
-    //    yield return new WaitForSeconds(1.5f);
-    //    elsa.SetActive(false);
-    //    Destroy(gameObject);
-    //}
 
     void OnTriggerEnter()
     {
-        if (!trigDone && !triggered)
+        if (!trigDone)
         {
             elsa.SetActive(true);
             elsa.transform.position = new Vector3(86.5f, 0, -568.66f);
@@ -123,28 +80,13 @@ public class trigger : MonoBehaviour
             StartCoroutine(HideElsa());
         }
 
-        if (triggered)
-        {
-            doorClose = true;
-            StartCoroutine(ElsaScary());
-        }
+       
 
-
-    }
-
-    private IEnumerator ElsaScary()
-    {
-        startMove2 = false;
-        gameObject.GetComponent<AudioSource>().Play();
-        yield return new WaitForSeconds(2f);
-        elsa.SetActive(true);
-        elsa.transform.position = new Vector3(142.5f, 0, -570f);
-        startMove3 = true;
     }
 
     private IEnumerator HideElsa()
     {
-        yield return new WaitForSeconds(4f);
+        yield return new WaitForSeconds(3.5f);
         startMove2 = true;
         StartCoroutine(HideElsa2());
     }
@@ -153,6 +95,6 @@ public class trigger : MonoBehaviour
     {
         yield return new WaitForSeconds(2f);
         elsa.SetActive(false);
-        //Destroy(gameObject);
+        Destroy(gameObject);
     }
 }

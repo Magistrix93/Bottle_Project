@@ -11,6 +11,8 @@ public class AntaSx : Items
     private GameObject phone;
     private PlayMakerFSM myFsm;
     private GameObject soundEffects;
+    private GameObject ambient;
+    private GameObject newAmbient;
     private AudioSource[] myAudio;
     public bool antaSx;
     public bool activated = true;
@@ -26,59 +28,72 @@ public class AntaSx : Items
         gameManager = GameObject.FindGameObjectWithTag("GameManager");
         gameManagerScript = gameManager.GetComponent<GameManager>();
         soundEffects = gameManager.GetComponent<PlayMakerFSM>().FsmVariables.GetFsmGameObject("Sound effects").Value;
+        ambient = gameManager.GetComponent<PlayMakerFSM>().FsmVariables.GetFsmGameObject("Ambient").Value;
+        newAmbient = gameManager.GetComponent<PlayMakerFSM>().FsmVariables.GetFsmGameObject("Ambient 2").Value;
         myAudio = soundEffects.GetComponents<AudioSource>();
         elsa = gameManagerScript.elsa;
         phone = gameManagerScript.phone;
         antaSxAnim = GetComponent<Animation>();
         myFsm = GetComponent<PlayMakerFSM>();
         sounds = GetComponents<AudioSource>();
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        antaSx = myFsm.FsmVariables.GetFsmBool("StartOpen").Value;
-
-        if (antaSx && activated)
+        if (gameManagerScript.faseA == FaseA.none)
         {
-            button.GetComponent<ButtonSearch>().rayObject = this.gameObject;
-            button.GetComponent<Image>().sprite = button.GetComponent<ButtonSearch>().searchIconUI;
-            button.SetActive(true);
-            activated = false;
+            antaSx = myFsm.FsmVariables.GetFsmBool("StartOpen").Value;
+
+            if (antaSx && activated)
+            {
+                button.GetComponent<ButtonSearch>().rayObject = gameObject;
+                button.GetComponent<Image>().sprite = button.GetComponent<ButtonSearch>().searchIconUI;
+                button.SetActive(true);
+                activated = false;
+            }
+
+            else if (!antaSx && !activated)
+            {
+                button.SetActive(false);
+                activated = true;
+            }
         }
 
-        else if (!antaSx && !activated)
-        {
-            button.SetActive(false);
-            activated = true;
-        }
+
+
     }
 
     public override void OnClicked()
     {
-
-        if (checkSx && !antaSxAnim.IsPlaying("antaSxRagazzaClose"))
-        {
-            sounds[0].Play();
-            antaSxAnim.Play("antaSxRagazza");
-            checkSx = false;
-
-            if (armadio.check)
+        if (gameManagerScript.faseA == FaseA.none)
+            if (checkSx && !antaSxAnim.IsPlaying("antaSxRagazzaClose"))
             {
-                armadio.check = false;
-                elsa.GetComponent<Animator>().SetTrigger("IsScream");
-                myAudio[6].Play();
-                gameManagerScript.avviaCoroutine(1f, elsa);
-                armadio.enabled = false;
-                phone.GetComponent<PlayMakerFSM>().SendEvent("Phone Ring");
-                gameManagerScript.faseA = FaseA.teddy;
+                sounds[0].Play();
+                antaSxAnim.Play("antaSxRagazza");
+                checkSx = false;
+
+
+                if (armadio.check && armadio.scaryStep)
+                {
+
+                    armadio.check = false;
+                    elsa.GetComponent<Animator>().SetTrigger("IsScream");
+                    myAudio[6].Play();
+                    gameManagerScript.avviaCoroutine(1f, elsa);
+                    armadio.enabled = false;
+                    phone.GetComponent<PlayMakerFSM>().SendEvent("Phone Ring");
+                    gameManagerScript.faseA = FaseA.teddy;
+                    ambient.SetActive(false);
+                    newAmbient.SetActive(true);
+                }
             }
-        }
-        else if (!checkSx && !antaSxAnim.IsPlaying("antaSxRagazza"))
-        {
-            antaSxAnim.Play("antaSxRagazzaClose");
-            sounds[1].Play();
-            checkSx = true;
-        }
+            else if (!checkSx && !antaSxAnim.IsPlaying("antaSxRagazza"))
+            {
+                antaSxAnim.Play("antaSxRagazzaClose");
+                sounds[1].Play();
+                checkSx = true;
+            }
     }
 }

@@ -16,23 +16,34 @@ public class PhotoCounter : MonoBehaviour
         gameManager = GameObject.FindGameObjectWithTag("GameManager");
         gameManagerScript = gameManager.GetComponent<GameManager>();
 
-        if (gameManagerScript.faseB != FaseB.none || !gameManagerScript.photos[0] && !gameManagerScript.photos[1] && !gameManagerScript.photos[2] && !gameManagerScript.photos[3])
+        if (gameManagerScript.fasi == Fasi.B)
         {
-            note2.SetActive(false);
-        }
-        
-        if(gameManagerScript.faseB == FaseB.none)
-        {
-            for (int i = 0; i < 4; i++)
+            if (gameManagerScript.faseB != FaseB.none || (!gameManagerScript.photos[0] && !gameManagerScript.photos[1] && !gameManagerScript.photos[2] && !gameManagerScript.photos[3]))
             {
-                if (gameManagerScript.photos[i])
+                note2.SetActive(false);
+            }
+
+            if (gameManagerScript.faseB == FaseB.none)
+            {
+                photoTook = 0;
+                for (int i = 0; i < 4; i++)
                 {
-                    note2.GetComponent<Image>().sprite = photoUI;
-                    photoTook++;
-                    UpdateText();
+                    if (gameManagerScript.photos[i])
+                    {
+                        note2.GetComponent<Image>().sprite = photoUI;
+                        photoTook++;
+                        UpdateText();
+                    }
                 }
             }
-        }        
+        }
+        else
+        {
+            note2.SetActive(false);
+            Destroy(gameObject);
+        }
+
+
     }
 
     // Update is called once per frame
@@ -42,7 +53,7 @@ public class PhotoCounter : MonoBehaviour
     }
 
     public void UpdateText()
-    {       
-        GetComponent<Text>().text = (photoTook + "/4");
+    {
+        GetComponent<Text>().text = (photoTook.ToString() + "/4");
     }
 }

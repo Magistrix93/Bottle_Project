@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using System;
 
 public class QuadroScript : Items
 {
@@ -16,19 +17,25 @@ public class QuadroScript : Items
     private PhotoCounter photo;
     public GameObject button;
     public GameObject trigElsa;
-    public GameObject trigDoor2;
     public bool quadro;
     public bool stepQuadro;
     private bool activated;
+    private GameObject phone;
+    public GameObject finalDoor;
+    public GameObject closeDoor;
+
+    private int layerdefault;
 
     // Use this for initialization
     void Start()
     {
+        layerdefault = LayerMask.GetMask("Default");
         myFsm = GetComponent<PlayMakerFSM>();
         gameManager = GameObject.FindGameObjectWithTag("GameManager");
         gameManagerScript = gameManager.GetComponent<GameManager>();
         soundEffects = gameManager.GetComponent<PlayMakerFSM>().FsmVariables.GetFsmGameObject("Sound effects").Value;
         myAudio = soundEffects.GetComponents<AudioSource>();
+        phone = GameObject.FindGameObjectWithTag("Phone");
         photo = text1.GetComponent<PhotoCounter>();
 
         if (gameManagerScript.fasi != Fasi.B)
@@ -44,7 +51,7 @@ public class QuadroScript : Items
 
             if (quadro && activated)
             {
-                button.GetComponent<ButtonSearch>().rayObject = this.gameObject;
+                button.GetComponent<ButtonSearch>().rayObject = gameObject;
                 button.GetComponent<Image>().sprite = button.GetComponent<ButtonSearch>().handIconUI;
                 button.SetActive(true);
                 activated = false;
@@ -65,13 +72,23 @@ public class QuadroScript : Items
             gameObject.GetComponent<Renderer>().material = fotoCompleta;
             stepQuadro = true;
             trigElsa.SetActive(true);
-            trigDoor2.SetActive(true);
             note2.SetActive(false);
             text1.SetActive(false);
             myAudio[10].Play();
             gameObject.GetComponent<AudioSource>().Play();
             button.SetActive(false);
+            StartCoroutine(DelayPhone());
+            finalDoor.layer = layerdefault;
+            gameManagerScript.faseB = FaseB.photos;
+            closeDoor.GetComponent<PlayMakerFSM>().SendEvent("Bool");
         }
        
+    }
+
+    private IEnumerator DelayPhone()
+    {
+        yield return new WaitForSeconds(3);
+        phone.GetComponent<PlayMakerFSM>().SendEvent("Phone Ring");
+
     }
 }

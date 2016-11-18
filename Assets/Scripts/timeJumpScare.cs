@@ -3,16 +3,22 @@ using System.Collections;
 
 public class timeJumpScare : MonoBehaviour
 {
-    public GameObject elsa;
+    private GameObject elsa;
     public GameObject player;
     public GameObject[] spawnPoints;
     public Lightmap switchLight;
     private int i;
 
+    private GameObject gameManager;
+    private GameManager gameManagerScript;
+
+
     // Use this for initialization
     void Start()
     {
-
+        gameManager = GameObject.FindGameObjectWithTag("GameManager");
+        gameManagerScript = gameManager.GetComponent<GameManager>();
+        elsa = gameManagerScript.elsa;
     }
 
     // Update is called once per frame

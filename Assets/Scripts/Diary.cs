@@ -16,6 +16,8 @@ public class Diary : Items
     public GameObject note1;
     private GameObject gameManager;
     private GameManager gameManagerScript;
+    private GameObject soundEffect;
+    private AudioSource[] audios;
 
 
     // Use this for initialization
@@ -24,6 +26,8 @@ public class Diary : Items
         myFsm = GetComponent<PlayMakerFSM>();
         gameManager = GameObject.FindGameObjectWithTag("GameManager");
         gameManagerScript = gameManager.GetComponent<GameManager>();
+        soundEffect = gameManager.GetComponent<PlayMakerFSM>().FsmVariables.GetFsmGameObject("Sound effects").Value;
+        audios = soundEffect.GetComponents<AudioSource>();
         if (gameManagerScript.fasi != Fasi.A)
             this.enabled = false;
     }
@@ -62,6 +66,7 @@ public class Diary : Items
         note1.GetComponent<Image>().sprite = diaryUI;
         button.SetActive(false);
         note1.SetActive(true);
+        audios[12].Play();
         diaryON = true;
     }
 }

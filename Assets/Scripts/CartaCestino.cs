@@ -19,6 +19,9 @@ public class CartaCestino : Items
     private GameManager gameManagerScript;
     public GameObject diario;
 
+    private GameObject soundEffect;
+    private AudioSource[] audios;
+
     // Use this for initialization
     void Start()
     {
@@ -27,7 +30,10 @@ public class CartaCestino : Items
         gameManager = GameObject.FindGameObjectWithTag("GameManager");
         gameManagerScript = gameManager.GetComponent<GameManager>();
         if (gameManagerScript.fasi != Fasi.A)
-            this.enabled = false;
+            enabled = false;
+
+        soundEffect = gameManager.GetComponent<PlayMakerFSM>().FsmVariables.GetFsmGameObject("Sound effects").Value;
+        audios = soundEffect.GetComponents<AudioSource>();
     }
 
     // Update is called once per frame
@@ -63,6 +69,7 @@ public class CartaCestino : Items
         note1.GetComponent<Image>().sprite = cartaUI;
         button.SetActive(false);
         note1.SetActive(true);
+        audios[12].Play();
         paperON = true;
     }
 }

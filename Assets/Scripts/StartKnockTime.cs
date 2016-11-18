@@ -3,6 +3,8 @@ using System.Collections;
 
 public class StartKnockTime : MonoBehaviour
 {
+    private GameObject gameManager;
+    private GameManager gameManagerScript;
 
     public GameObject slotDoll;
     public bool trigOn;
@@ -11,7 +13,10 @@ public class StartKnockTime : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-                
+        gameManager = GameObject.FindGameObjectWithTag("GameManager");
+        gameManagerScript = gameManager.GetComponent<GameManager>();
+        if (gameManagerScript.fasi != Fasi.A)
+            Destroy(gameObject);
     }
 
     // Update is called once per frame
@@ -22,9 +27,11 @@ public class StartKnockTime : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Player" && trigOn && !startTime.scaryStep)
-        {
-            startTime.enabled = true;
-        }
+        if (gameManagerScript.faseA == FaseA.none)
+            if (other.tag == "Player" && trigOn && !startTime.scaryStep)
+            {
+                startTime.enabled = true;
+            }
+
     }
 }

@@ -12,7 +12,9 @@ public class imgArmadio : Items
     public GameObject note1;
     private GameObject gameManager;
     private GameManager gameManagerScript;
-
+    private GameObject soundeffect;
+    private AudioSource[] audios;
+ 
     // Use this for initialization
     void Start()
     {
@@ -21,6 +23,8 @@ public class imgArmadio : Items
         gameManagerScript = gameManager.GetComponent<GameManager>();
         if (gameManagerScript.fasi != Fasi.A)
             this.enabled = false;
+        soundeffect = gameManager.GetComponent<PlayMakerFSM>().FsmVariables.GetFsmGameObject("Sound effects").Value;
+        audios = soundeffect.GetComponents<AudioSource>();
     }
 
     // Update is called once per frame
@@ -50,7 +54,9 @@ public class imgArmadio : Items
 
     public override void OnClicked()
     {
+        button.SetActive(false);
         note1.SetActive(true);
         note1.GetComponent<Image>().sprite = imgWardrobeUI;
+        audios[12].Play();
     }
 }

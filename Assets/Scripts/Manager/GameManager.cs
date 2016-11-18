@@ -42,6 +42,7 @@ public enum FasiEnigmaLavagna
     completed
 }
 
+
 public class GameManager : MonoBehaviour
 {
     [SerializeField]
@@ -49,11 +50,14 @@ public class GameManager : MonoBehaviour
     private Lightmap switchLight;
     [SerializeField]
     private btnExit btnexit;
-    private PlayMakerFSM switchLightmap;
+    private PlayMakerFSM myFSM;
     [SerializeField]
     private GameObject enigmaA3;
     private PlayMakerFSM enigmaA3FSM;
     public GameObject phone;
+
+    public GameObject ambient, ambient2, ambient3, ambient4;
+
     public Fasi fasi = Fasi.menu;
     public FaseA faseA = FaseA.none;
     public FaseB faseB = FaseB.none;
@@ -67,13 +71,17 @@ public class GameManager : MonoBehaviour
 
     public FasiEnigmaLavagna enigmaLavagna = FasiEnigmaLavagna.trovaFoto;
 
+    public bool phoneDisturbed = true;
+
     // Use this for initialization
     void Start()
     {
         switchLight = GetComponent<Lightmap>();
-        switchLightmap = GetComponent<PlayMakerFSM>();
+        myFSM = GetComponent<PlayMakerFSM>();
         photos = new bool[4];
         ovenClue = new bool[2];
+        elsa = GameObject.FindGameObjectWithTag("Elsa");
+        myFSM.FsmVariables.GetFsmGameObject("Elsa").Value = elsa;
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
@@ -90,23 +98,23 @@ public class GameManager : MonoBehaviour
                         case FaseA.diary:
                             {
                                 enigmaA3FSM.FsmVariables.GetFsmBool("Enigma Telecomando").Value = true;
+                                ambient.SetActive(false);
+                                ambient2.SetActive(true);
                                 break;
                             }
 
                         case FaseA.teddy:
                             {
                                 enigmaA3FSM.FsmVariables.GetFsmBool("Enigma Telecomando").Value = true;
+                                ambient.SetActive(false);
+                                ambient2.SetActive(true);
                                 break;
                             }
 
-                        case FaseA.none:
+                        case FaseA.tv:
                             {
-                                if (btnexit != null && btnexit.on)
-                                {
-                                    switchLightmap.SendEvent("JumpScareClock");
-                                    btnexit.on = false;
-                                }
-
+                                ambient.SetActive(false);
+                                ambient2.SetActive(true);
                                 break;
                             }
 
@@ -117,7 +125,33 @@ public class GameManager : MonoBehaviour
                 }
 
             case Fasi.B:
-                { break; }
+                {
+                    switch (faseB)
+                    {
+                        case FaseB.frame:
+                            {
+                                ambient2.SetActive(false);
+                                ambient4.SetActive(true);
+                                break;
+                            }
+                        case FaseB.perspective:
+                            {
+                                ambient2.SetActive(false);
+                                ambient4.SetActive(true);
+                                break;
+                            }
+                        case FaseB.photos:
+                            {
+                                ambient2.SetActive(false);
+                                ambient4.SetActive(true);
+                                break;
+                            }
+
+                        default: { break; }
+                    }
+
+                    break;
+                }
 
 
             case Fasi.C:
@@ -148,10 +182,7 @@ public class GameManager : MonoBehaviour
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         phone = GameObject.FindGameObjectWithTag("Phone");
-        elsa = GameObject.FindGameObjectWithTag("Elsa");
-        switchLightmap.FsmVariables.GetFsmGameObject("Elsa").Value = elsa;
         elsa.SetActive(false);
-
         switch (fasi)
         {
             case Fasi.A:
@@ -172,6 +203,7 @@ public class GameManager : MonoBehaviour
                 }
             case Fasi.B:
                 {
+
                     switch (faseB)
                     {
                         case FaseB.none: { break; }
@@ -195,14 +227,6 @@ public class GameManager : MonoBehaviour
         {
             enigmaA3 = GameObject.FindGameObjectWithTag("EnigmaA3");
             enigmaA3FSM = enigmaA3.GetComponent<PlayMakerFSM>();
-            btnexit = GameObject.FindGameObjectWithTag("BtnExit").GetComponent<btnExit>();
-            btnexit.audioSlam = switchLightmap.FsmVariables.GetFsmGameObject("Sound effects").Value;
-            btnexit.gameObject.SetActive(false);
-        }
-
-        if (scene.buildIndex == 2)
-        {
-
         }
 
 
