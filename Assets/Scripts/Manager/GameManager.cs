@@ -66,6 +66,9 @@ public class GameManager : MonoBehaviour
     public bool[] photos;
 
     public bool[] ovenClue;
+    
+    public static bool[] letters;
+    public bool[] lettere;
 
     public bool framedFound;
 
@@ -80,6 +83,8 @@ public class GameManager : MonoBehaviour
         myFSM = GetComponent<PlayMakerFSM>();
         photos = new bool[4];
         ovenClue = new bool[2];
+        letters = new bool[6];
+        lettere = new bool[6];
         elsa = GameObject.FindGameObjectWithTag("Elsa");
         myFSM.FsmVariables.GetFsmGameObject("Elsa").Value = elsa;
         SceneManager.sceneLoaded += OnSceneLoaded;
@@ -88,6 +93,7 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        lettere = letters;
 
         switch (fasi)
         {
