@@ -10,6 +10,10 @@ public class GUILetters : MonoBehaviour
     private int k;
     private string[] lettere;
     public GameObject[] lettersSprite;
+    [SerializeField]
+    private Color fullColor;
+    [SerializeField]
+    private Color startColor;
 
     // Use this for initialization
     void Start()
@@ -19,6 +23,7 @@ public class GUILetters : MonoBehaviour
         for (j = 0; j < 6; j++)     //Setto un array di stringhe vuote che saranno riempite con le lettere cliccate
         {
             lettere[i] = "";
+            lettersSprite[j].GetComponent<SpriteRenderer>().color = startColor;
         }
 
         StartCoroutine(StartFlash());
@@ -29,9 +34,9 @@ public class GUILetters : MonoBehaviour
     {
         for(k=0;k<6;k++)
         {
-            lettersSprite[k].SetActive(true);
-            yield return new WaitForSeconds(UnityEngine.Random.Range(5,2));
-            lettersSprite[k].SetActive(false);
+            lettersSprite[k].GetComponent<SpriteRenderer>().color = fullColor;
+            yield return new WaitForSeconds(UnityEngine.Random.Range(5,10));
+            lettersSprite[k].GetComponent<SpriteRenderer>().color = startColor;
         }
         
     }

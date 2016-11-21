@@ -25,7 +25,7 @@ public class Letters : Items
         gameManagerScript = gameManager.GetComponent<GameManager>();
 
         soundEffects = gameManager.GetComponent<PlayMakerFSM>().FsmVariables.GetFsmGameObject("Sound effects").Value;
-        myAudio = soundEffects.GetComponents<AudioSource>();
+        //myAudio = soundEffects.GetComponents<AudioSource>();
 
         spriteLetter = gameObject.GetComponent<SpriteRenderer>().sprite;
         GUIWordScript = GUIWord.GetComponent<GUILetters>();
