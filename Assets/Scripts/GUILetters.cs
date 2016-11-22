@@ -11,19 +11,25 @@ public class GUILetters : MonoBehaviour
     private string[] lettere;
     public GameObject[] lettersSprite;
     [SerializeField]
-    private Color fullColor;
+    public Color fullColor;
     [SerializeField]
-    private Color startColor;
+    public Color startColor;
+    public bool[] clickable;
+    private PlayMakerFSM[] lettersFSM;
+    public int lettersDone = 0;
 
     // Use this for initialization
     void Start()
     {
         lettere = new string[6];
+        clickable = new bool[6];
+        lettersFSM = new PlayMakerFSM[6];
 
         for (j = 0; j < 6; j++)     //Setto un array di stringhe vuote che saranno riempite con le lettere cliccate
         {
             lettere[i] = "";
             lettersSprite[j].GetComponent<SpriteRenderer>().color = startColor;
+            lettersFSM[j] = lettersSprite[j].GetComponent<PlayMakerFSM>();
         }
 
         StartCoroutine(StartFlash());
@@ -32,19 +38,23 @@ public class GUILetters : MonoBehaviour
 
     private IEnumerator StartFlash()    //Coroutine per accendere e spegnere le lettere
     {
-        for(k=0;k<6;k++)
+        for (k = 0; k < 6; k++)
         {
+            lettersFSM[k].SendEvent("Update Items");
+            //lettersSprite[k].layer = 5;
             lettersSprite[k].GetComponent<SpriteRenderer>().color = fullColor;
-            yield return new WaitForSeconds(UnityEngine.Random.Range(5,10));
+            yield return new WaitForSeconds(UnityEngine.Random.Range(5, 10));
+            lettersFSM[k].SendEvent("Update Default");
+            //lettersSprite[k].layer = 0;
             lettersSprite[k].GetComponent<SpriteRenderer>().color = startColor;
         }
-        
+
     }
 
-    
+
     void Update()  // Update is called once per frame
     {
-        if(k==6)
+        if (k == 6)
             StartCoroutine(StartFlash());
     }
 

@@ -87,6 +87,7 @@ public class AntaSx : Items
                     gameManagerScript.faseA = FaseA.teddy;
                     ambient.SetActive(false);
                     newAmbient.SetActive(true);
+                    button.SetActive(false);
                 }
             }
             else if (!checkSx && !antaSxAnim.IsPlaying("antaSxRagazza"))

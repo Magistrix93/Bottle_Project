@@ -60,14 +60,18 @@ public class Letters : Items
         {
             GameManager.letters[0] = true;
             GUIWordScript.UpdateText();
+            GUIWordScript.lettersDone++;
+            gameObject.SetActive(false);
             button.SetActive(false);
 
-        }    
+        }
 
         if (spriteLetter.name == "A")
         {
             GameManager.letters[1] = true;
             GUIWordScript.UpdateText();
+            GUIWordScript.lettersDone++;
+            gameObject.SetActive(false);
             button.SetActive(false);
         }
 
@@ -75,6 +79,8 @@ public class Letters : Items
         {
             GameManager.letters[2] = true;
             GUIWordScript.UpdateText();
+            GUIWordScript.lettersDone++;
+            gameObject.SetActive(false);
             button.SetActive(false);
         }
 
@@ -82,6 +88,8 @@ public class Letters : Items
         {
             GameManager.letters[3] = true;
             GUIWordScript.UpdateText();
+            GUIWordScript.lettersDone++;
+            gameObject.SetActive(false);
             button.SetActive(false);
         }
 
@@ -89,6 +97,8 @@ public class Letters : Items
         {
             GameManager.letters[4] = true;
             GUIWordScript.UpdateText();
+            GUIWordScript.lettersDone++;
+            gameObject.SetActive(false);
             button.SetActive(false);
         }
 
@@ -96,6 +106,8 @@ public class Letters : Items
         {
             GameManager.letters[5] = true;
             GUIWordScript.UpdateText();
+            GUIWordScript.lettersDone++;
+            gameObject.SetActive(false);
             button.SetActive(false);
         }
     }
