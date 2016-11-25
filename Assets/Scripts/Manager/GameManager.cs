@@ -3,6 +3,7 @@ using UnityEngine.Advertisements;
 using UnityEngine.UI;
 using System.Collections;
 using UnityEngine.SceneManagement;
+using UnityStandardAssets.CrossPlatformInput;
 using System;
 
 public enum Fasi
@@ -59,6 +60,8 @@ public class GameManager : MonoBehaviour
 
     public GameObject ambient, ambient2, ambient3, ambient4, ambient5, randomSound;
 
+    public float Xsensitive = 1f, Ysensitive = 1f;
+
     public Fasi fasi = Fasi.menu;
     public FaseA faseA = FaseA.none;
     public FaseB faseB = FaseB.none;
@@ -93,9 +96,12 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private GameObject[] elsaJumpScares;
 
+    public GameObject touchpad;
+    private TouchPad pad;
+
     // Use this for initialization
     void Start()
-    {       
+    {
         switchLight = GetComponent<Lightmap>();
         myFSM = GetComponent<PlayMakerFSM>();
         photos = new bool[4];
@@ -109,7 +115,11 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        if (pad != null)
+        {
+            pad.Xsensitivity = Xsensitive;
+            pad.Ysensitivity = Ysensitive;
+        }
 
         switch (fasi)
         {
@@ -209,8 +219,14 @@ public class GameManager : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        
-        if(elsa != null)
+
+        if (scene.buildIndex != 0)
+        {
+            touchpad = GameObject.FindGameObjectWithTag("TouchPad");
+            pad = touchpad.GetComponent<TouchPad>();
+        }
+
+        if (elsa != null)
             elsa.SetActive(false);
 
         if (scene.buildIndex == 1)
@@ -275,8 +291,8 @@ public class GameManager : MonoBehaviour
         }
 
 
-       
-            
+
+
 
     }
 
@@ -417,7 +433,7 @@ public class GameManager : MonoBehaviour
             jumpscares[random2].SetActive(true);
         }
 
-        if(fasi == Fasi.A)
+        if (fasi == Fasi.A)
         {
             random1 = UnityEngine.Random.Range(0, 3);
             elsaJumpScares[random1].SetActive(true);
@@ -427,12 +443,12 @@ public class GameManager : MonoBehaviour
             random1 = UnityEngine.Random.Range(0, elsaChildCount);
             elsaJumpScares[random1].SetActive(true);
         }
-     
+
 
     }
 
     private IEnumerator DelayFirstScare(int random1, int random2)
-    {   
+    {
 
         yield return new WaitForSeconds(90f);
         jumpscares[random1].SetActive(true);

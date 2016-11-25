@@ -100,6 +100,7 @@ public class ClockEvent : MonoBehaviour
         elsa.SetActive(true);
         elsa.transform.position = new Vector3(dollOBJ.transform.position.x, dollOBJ.transform.position.y + 0.5f, dollOBJ.transform.position.z + 0.45f);
         elsa.transform.rotation = Quaternion.Euler(0, -190, 0);
+        elsa.GetComponent<Animator>().SetTrigger("IsIdle");
         scaryStep = true;
         anta.GetComponent<AntaSx>().enabled = true;
 
