@@ -4,7 +4,7 @@ using System.Collections;
 
 public class AntaSx : Items
 {
-
+    public GameObject dollOBJ;
     private GameObject gameManager;
     private GameManager gameManagerScript;
     private GameObject elsa;
@@ -77,7 +77,9 @@ public class AntaSx : Items
 
                 if (armadio.check && armadio.scaryStep)
                 {
-
+                    elsa.SetActive(true);
+                    elsa.transform.position = new Vector3(dollOBJ.transform.position.x, 0, dollOBJ.transform.position.z + 0.45f);
+                    elsa.transform.rotation = Quaternion.Euler(0, -190, 0);
                     armadio.check = false;
                     elsa.GetComponent<Animator>().SetTrigger("IsScream");
                     myAudio[6].Play();

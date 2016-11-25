@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using System;
 
 public class imgArmadio : Items
 {
@@ -14,6 +15,8 @@ public class imgArmadio : Items
     private GameManager gameManagerScript;
     private GameObject soundeffect;
     private AudioSource[] audios;
+
+    public GameObject engText;
  
     // Use this for initialization
     void Start()
@@ -25,6 +28,15 @@ public class imgArmadio : Items
             this.enabled = false;
         soundeffect = gameManager.GetComponent<PlayMakerFSM>().FsmVariables.GetFsmGameObject("Sound effects").Value;
         audios = soundeffect.GetComponents<AudioSource>();
+        engText.transform.parent.gameObject.SetActive(true);
+        engText.GetComponent<Text>().text = "There is something under Teddy...";
+        StartCoroutine(DisableText());
+    }
+
+    private IEnumerator DisableText()
+    {
+        yield return new WaitForSeconds(3f);
+        engText.transform.parent.gameObject.SetActive(false);
     }
 
     // Update is called once per frame

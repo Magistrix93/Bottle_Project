@@ -37,6 +37,7 @@ public class trigger : MonoBehaviour
 
         if (startMove)
         {
+            elsa.GetComponent<Animator>().SetTrigger("IsIdle");
             elsa.GetComponent<Animator>().SetBool("IsWalk", true);
             elsa.transform.position = Vector3.MoveTowards(elsa.transform.position, elsaTarget.transform.position, 4f * Time.deltaTime);
 
@@ -86,7 +87,7 @@ public class trigger : MonoBehaviour
 
     private IEnumerator HideElsa()
     {
-        yield return new WaitForSeconds(3.5f);
+        yield return new WaitForSeconds(3f);
         startMove2 = true;
         StartCoroutine(HideElsa2());
     }

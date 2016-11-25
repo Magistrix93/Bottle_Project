@@ -11,7 +11,7 @@ AudioImporter:
     conversionMode: 0
   platformSettingOverrides:
     7:
-      loadType: 2
+      loadType: 0
       sampleRateSetting: 1
       sampleRateOverride: 0
       compressionFormat: 1
@@ -19,8 +19,8 @@ AudioImporter:
       conversionMode: 0
   forceToMono: 1
   normalize: 1
-  preloadAudioData: 1
-  loadInBackground: 1
+  preloadAudioData: 0
+  loadInBackground: 0
   3D: 1
   userData: 
   assetBundleName: 

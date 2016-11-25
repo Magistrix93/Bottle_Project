@@ -4,9 +4,8 @@ using System.Collections;
 
 public class btnExit : MonoBehaviour
 {
-
+    public GameObject controllerCamera;
     public GameObject camTime;
-    public GameObject mainCam;
     public GameObject controller1;
     public GameObject controller2;
     public GameObject btnLeft;
@@ -42,15 +41,16 @@ public class btnExit : MonoBehaviour
 
     public void OnClick()
     {
-        mainCam.SetActive(true);
+        controllerCamera = orologio.GetComponent<Orologio>().controllerCamera;
+        controllerCamera.SetActive(true);
         camTime.SetActive(false);
         controller1.GetComponent<Image>().enabled = true;
         controller2.GetComponent<Image>().enabled = true;
-       
+
         btnLeft.SetActive(false);
         btnRight.SetActive(false);
 
-        
+
 
         if (orologio.GetComponent<Clock>().minutes == 30 && orologio.GetComponent<Clock>().hour == 12)
         {

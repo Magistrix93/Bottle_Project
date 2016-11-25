@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Advertisements;
 using System.Collections;
 using UnityEngine.SceneManagement;
 
@@ -7,7 +8,6 @@ public class LoadScene : MonoBehaviour
 {
     private GameObject gameManager;
     private GameObject Elsa;
-    public GameObject cameraEffect;
 
     void Start()
     {
@@ -20,6 +20,9 @@ public class LoadScene : MonoBehaviour
     public void LoadByIndex(int sceneIndex)
     {
         gameManager.GetComponent<GameManager>().fasi = Fasi.A;
+        if (Advertisement.IsReady())
+            Advertisement.Show();
+
         SceneManager.LoadScene(sceneIndex);
     }
 }

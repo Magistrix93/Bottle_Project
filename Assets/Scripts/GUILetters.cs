@@ -10,59 +10,44 @@ public class GUILetters : MonoBehaviour
     private int k;
     private string[] lettere;
     public GameObject[] lettersSprite;
-    [SerializeField]
-    public Color fullColor;
-    [SerializeField]
-    public Color startColor;
+
     public bool[] clickable;
-    private PlayMakerFSM[] lettersFSM;
+
     public int lettersDone = 0;
+
+    public bool[] letters;
+    public bool[] letterePrese;
 
     // Use this for initialization
     void Start()
     {
         lettere = new string[6];
         clickable = new bool[6];
-        lettersFSM = new PlayMakerFSM[6];
+
+        letters = new bool[6];
+        letterePrese = new bool[6];
 
         for (j = 0; j < 6; j++)     //Setto un array di stringhe vuote che saranno riempite con le lettere cliccate
         {
             lettere[i] = "";
-            lettersSprite[j].GetComponent<SpriteRenderer>().color = startColor;
-            lettersFSM[j] = lettersSprite[j].GetComponent<PlayMakerFSM>();
         }
 
-        StartCoroutine(StartFlash());
+
 
     }
 
-    private IEnumerator StartFlash()    //Coroutine per accendere e spegnere le lettere
-    {
-        for (k = 0; k < 6; k++)
-        {
-            lettersFSM[k].SendEvent("Update Items");
-            //lettersSprite[k].layer = 5;
-            lettersSprite[k].GetComponent<SpriteRenderer>().color = fullColor;
-            yield return new WaitForSeconds(UnityEngine.Random.Range(5, 10));
-            lettersFSM[k].SendEvent("Update Default");
-            //lettersSprite[k].layer = 0;
-            lettersSprite[k].GetComponent<SpriteRenderer>().color = startColor;
-        }
-
-    }
 
 
     void Update()  // Update is called once per frame
     {
-        if (k == 6)
-            StartCoroutine(StartFlash());
+        letterePrese = letters;
     }
 
     public void UpdateText()       //Chiamato quando una di queste lettere è stata cliccata
     {
         for (i = 0; i < 6; i++)
         {
-            if (GameManager.letters[i])
+            if (letters[i])
             {
                 if (i == 0)
                     lettere[i] = "F";

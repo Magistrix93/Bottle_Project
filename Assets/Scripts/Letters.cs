@@ -17,25 +17,30 @@ public class Letters : Items
     public GameObject GUIWord;
     private GUILetters GUIWordScript;
 
+    [SerializeField]
+    public Color startColor = new Color(255f, 0f, 0f, 255f);
+    [SerializeField]
+    public Color fullColor = new Color(255, 0, 255);
+
     // Use this for initialization
     void Start()
     {
         myFsm = GetComponent<PlayMakerFSM>();
-        gameManager = GameObject.FindGameObjectWithTag("GameManager");
-        gameManagerScript = gameManager.GetComponent<GameManager>();
 
-        soundEffects = gameManager.GetComponent<PlayMakerFSM>().FsmVariables.GetFsmGameObject("Sound effects").Value;
+        //soundEffects = gameManager.GetComponent<PlayMakerFSM>().FsmVariables.GetFsmGameObject("Sound effects").Value;
         //myAudio = soundEffects.GetComponents<AudioSource>();
 
         spriteLetter = gameObject.GetComponent<SpriteRenderer>().sprite;
         GUIWordScript = GUIWord.GetComponent<GUILetters>();
+        startColor = new Color(1f, 0f, 0.04f, 1f);
+        fullColor = Color.white;
+        StartCoroutine(StartFlash());
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (gameManagerScript.faseC == FaseC.none)
-        {
+        
             letter = myFsm.FsmVariables.GetFsmBool("StartOpen").Value;
 
             if (letter && activated)
@@ -51,14 +56,13 @@ public class Letters : Items
                 button.SetActive(false);
                 activated = true;
             }
-        }
     }
 
     public override void OnClicked()
     {
         if (spriteLetter.name == "F")
         {
-            GameManager.letters[0] = true;
+            GUIWordScript.letters[0] = true;
             GUIWordScript.UpdateText();
             GUIWordScript.lettersDone++;
             gameObject.SetActive(false);
@@ -68,7 +72,7 @@ public class Letters : Items
 
         if (spriteLetter.name == "A")
         {
-            GameManager.letters[1] = true;
+            GUIWordScript.letters[1] = true;
             GUIWordScript.UpdateText();
             GUIWordScript.lettersDone++;
             gameObject.SetActive(false);
@@ -77,7 +81,7 @@ public class Letters : Items
 
         if (spriteLetter.name == "T")
         {
-            GameManager.letters[2] = true;
+            GUIWordScript.letters[2] = true;
             GUIWordScript.UpdateText();
             GUIWordScript.lettersDone++;
             gameObject.SetActive(false);
@@ -86,7 +90,7 @@ public class Letters : Items
 
         if (spriteLetter.name == "H")
         {
-            GameManager.letters[3] = true;
+            GUIWordScript.letters[3] = true;
             GUIWordScript.UpdateText();
             GUIWordScript.lettersDone++;
             gameObject.SetActive(false);
@@ -95,7 +99,7 @@ public class Letters : Items
 
         if (spriteLetter.name == "E")
         {
-            GameManager.letters[4] = true;
+            GUIWordScript.letters[4] = true;
             GUIWordScript.UpdateText();
             GUIWordScript.lettersDone++;
             gameObject.SetActive(false);
@@ -104,11 +108,28 @@ public class Letters : Items
 
         if (spriteLetter.name == "R")
         {
-            GameManager.letters[5] = true;
+            GUIWordScript.letters[5] = true;
             GUIWordScript.UpdateText();
             GUIWordScript.lettersDone++;
             gameObject.SetActive(false);
             button.SetActive(false);
         }
     }
+
+    private IEnumerator StartFlash()    //Coroutine per accendere e spegnere le lettere
+    {
+        gameObject.GetComponent<SpriteRenderer>().color = fullColor;
+        yield return new WaitForSeconds(Random.Range(1f, 4f));        
+        StartCoroutine(StopFlash());
+    }
+
+
+    private IEnumerator StopFlash()
+    {
+        gameObject.GetComponent<SpriteRenderer>().color = startColor;
+        yield return new WaitForSeconds(Random.Range(1f, 4f));
+        StartCoroutine(StartFlash());
+    }
 }
+
+

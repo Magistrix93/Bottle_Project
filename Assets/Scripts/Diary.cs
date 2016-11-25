@@ -49,7 +49,7 @@ public class Diary : Items
 
             else if (!diaryRead && !activated)
             {
-                text.SetActive(false);
+                text.transform.parent.gameObject.SetActive(false);
                 text.GetComponent<Text>().text = "";
                 button.SetActive(false);
                 activated = true;
@@ -61,8 +61,8 @@ public class Diary : Items
 
     public override void OnClicked()
     {
-        text.SetActive(true);
-        text.GetComponent<Text>().text = "A page is missing.";
+        text.transform.parent.gameObject.SetActive(true);
+        text.GetComponent<Text>().text = "A page is missing";
         note1.GetComponent<Image>().sprite = diaryUI;
         button.SetActive(false);
         note1.SetActive(true);

@@ -14,8 +14,7 @@ public class Orologio : Items
     public bool timeON;
     public GameObject button;
     public GameObject camTime;
-    public GameObject mainCam;
-    public GameObject controller;
+    public GameObject controllerCamera;
     public GameObject buttonExit;
     public GameObject btnLeft;
     public GameObject btnRight;
@@ -61,9 +60,10 @@ public class Orologio : Items
 
     public override void OnClicked()
     {
+        controllerCamera = GameObject.FindGameObjectWithTag("MainCamera");
+        controllerCamera.SetActive(false);
         timeON = true;
         button.SetActive(false);
-        mainCam.SetActive(false);
         camTime.SetActive(true);
         controller1.GetComponent<Image>().enabled = false;
         controller2.GetComponent<Image>().enabled = false;

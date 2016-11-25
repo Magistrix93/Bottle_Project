@@ -9,12 +9,10 @@ public class ClockEvent : MonoBehaviour
     public int hour = 0;
 
     public float clockSpeed = 1.0f;     // 1.0f = realtime, < 1.0f = slower, > 1.0f = faster
-
-    public GameObject button;
+    
     public GameObject anta;
     public GameObject dollOBJ;
     private GameObject elsa;
-    public GameObject player;
     public bool antaCheck;
     public AudioSource myAudio;
     public AudioClip myClip;

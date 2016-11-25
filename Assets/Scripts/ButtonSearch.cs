@@ -17,11 +17,11 @@ public class ButtonSearch : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        gameManager = GameObject.FindGameObjectWithTag("GameManager");
-        gameManagerScript = gameManager.GetComponent<GameManager>();
+        //gameManager = GameObject.FindGameObjectWithTag("GameManager");
+        //gameManagerScript = gameManager.GetComponent<GameManager>();
 
-        soundEffects = gameManager.GetComponent<PlayMakerFSM>().FsmVariables.GetFsmGameObject("Sound effects").Value;
-        myAudio = soundEffects.GetComponents<AudioSource>();
+        //soundEffects = gameManager.GetComponent<PlayMakerFSM>().FsmVariables.GetFsmGameObject("Sound effects").Value;
+        //myAudio = soundEffects.GetComponents<AudioSource>();
     }
 
     // Update is called once per frame
